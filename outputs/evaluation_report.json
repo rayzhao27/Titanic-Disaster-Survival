@@ -1,0 +1,53 @@
+{
+  "model_name": "rf",
+  "metrics": {
+    "accuracy": 0.8171641791044776,
+    "precision": 0.824294693986185,
+    "recall": 0.8171641791044776,
+    "f1_score": 0.8095708370944484,
+    "auc_score": 0.7803765813474551
+  },
+  "confusion_matrix": [
+    [
+      155,
+      10
+    ],
+    [
+      39,
+      64
+    ]
+  ],
+  "classification_report": {
+    "0.0": {
+      "precision": 0.7989690721649485,
+      "recall": 0.9393939393939394,
+      "f1-score": 0.8635097493036211,
+      "support": 165.0
+    },
+    "1.0": {
+      "precision": 0.8648648648648649,
+      "recall": 0.6213592233009708,
+      "f1-score": 0.7231638418079096,
+      "support": 103.0
+    },
+    "accuracy": 0.8171641791044776,
+    "macro avg": {
+      "precision": 0.8319169685149067,
+      "recall": 0.7803765813474551,
+      "f1-score": 0.7933367955557653,
+      "support": 268.0
+    },
+    "weighted avg": {
+      "precision": 0.824294693986185,
+      "recall": 0.8171641791044776,
+      "f1-score": 0.8095708370944484,
+      "support": 268.0
+    }
+  },
+  "summary": {
+    "total_samples": 268,
+    "correct_predictions": 219,
+    "survival_rate_actual": 0.3843283582089552,
+    "survival_rate_predicted": 0.27611940298507465
+  }
+}

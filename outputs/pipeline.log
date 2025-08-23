@@ -1,0 +1,536 @@
+2025-07-31 15:53:12 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-07-31 15:53:12 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-07-31 15:53:12 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-07-31 15:53:12 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-07-31 15:53:12 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-07-31 15:53:12 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-07-31 15:53:13 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-07-31 15:53:13 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-07-31 15:53:13 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-07-31 15:53:13 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-07-31 15:53:13 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-07-31 15:53:13 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-07-31 15:53:13 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-07-31 15:53:13 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-07-31 15:53:13 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-07-31 15:53:13 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-07-31 15:53:13 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-07-31 15:53:13 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-07-31 15:53:13 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-07-31 15:53:14 - src.models.model_factory - INFO - Best model: rf (CV: 0.8428)
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-07-31 15:53:14 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-07-31 15:53:15 - src.utils.visualization - INFO - Model comparison plot saved to outputs/model_comparison.png
+2025-07-31 15:53:15 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-07-31 15:53:15 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-07-31 15:53:15 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-07-31 15:53:15 - __main__ - INFO - 
+================================================================================
+2025-07-31 15:53:15 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-07-31 15:53:15 - __main__ - INFO - ================================================================================
+2025-07-31 15:53:15 - __main__ - INFO - Best Model: rf
+2025-07-31 15:53:15 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-07-31 15:53:15 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-07-31 15:53:15 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-07-31 15:53:15 - __main__ - INFO - Results saved to: outputs
+2025-07-31 15:53:15 - __main__ - INFO - ================================================================================
+2025-07-31 15:53:15 - __main__ - INFO - Pipeline completed successfully!
+2025-07-31 16:04:34 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-07-31 16:04:34 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-07-31 16:04:34 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-07-31 16:04:34 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-07-31 16:04:34 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-07-31 16:04:34 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-07-31 16:04:35 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-07-31 16:04:35 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-07-31 16:04:35 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-07-31 16:04:35 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-07-31 16:04:35 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-07-31 16:04:35 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-07-31 16:04:35 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-07-31 16:04:35 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-07-31 16:04:36 - src.models.model_factory - INFO - Best model: rf (CV: 0.8428)
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-07-31 16:04:36 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-07-31 16:04:36 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-07-31 16:04:36 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-07-31 16:04:36 - __main__ - INFO - 
+================================================================================
+2025-07-31 16:04:36 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-07-31 16:04:36 - __main__ - INFO - ================================================================================
+2025-07-31 16:04:36 - __main__ - INFO - Best Model: rf
+2025-07-31 16:04:36 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-07-31 16:04:36 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-07-31 16:04:36 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-07-31 16:04:36 - __main__ - INFO - Results saved to: outputs
+2025-07-31 16:04:36 - __main__ - INFO - ================================================================================
+2025-07-31 16:04:36 - __main__ - INFO - Pipeline completed successfully!
+2025-07-31 16:10:19 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-07-31 16:10:19 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-07-31 16:10:19 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-07-31 16:10:19 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-07-31 16:10:19 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-07-31 16:10:19 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-07-31 16:10:20 - src.models.model_factory - INFO - rf - CV: 0.8332, Gap: 0.0320
+2025-07-31 16:10:20 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-07-31 16:10:20 - src.models.model_factory - INFO - xgb - CV: 0.7592, Gap: 0.0012
+2025-07-31 16:10:20 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-07-31 16:10:20 - src.models.model_factory - INFO - lgb - CV: 0.7881, Gap: -0.0216
+2025-07-31 16:10:20 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-07-31 16:10:20 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-07-31 16:10:20 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-07-31 16:10:20 - src.models.model_factory - INFO - Best model: ensemble (CV: 0.8347)
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.321
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-07-31 16:10:20 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-07-31 16:10:21 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-07-31 16:10:21 - src.utils.metrics - INFO - Generating detailed evaluation report for ensemble
+2025-07-31 16:10:21 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-07-31 16:10:21 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-07-31 16:10:21 - __main__ - INFO - 
+================================================================================
+2025-07-31 16:10:21 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-07-31 16:10:21 - __main__ - INFO - ================================================================================
+2025-07-31 16:10:21 - __main__ - INFO - Best Model: ensemble
+2025-07-31 16:10:21 - __main__ - INFO - Cross-Validation Score: 0.8347
+2025-07-31 16:10:21 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-07-31 16:10:21 - __main__ - INFO - Predicted Survival Rate: 0.321
+2025-07-31 16:10:21 - __main__ - INFO - Results saved to: outputs
+2025-07-31 16:10:21 - __main__ - INFO - ================================================================================
+2025-07-31 16:10:21 - __main__ - INFO - Pipeline completed successfully!
+2025-07-31 16:15:18 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-07-31 16:15:18 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-07-31 16:15:18 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-07-31 16:15:18 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-07-31 16:15:18 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-07-31 16:15:18 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-07-31 16:15:19 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-07-31 16:15:19 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-07-31 16:15:19 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-07-31 16:15:19 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-07-31 16:15:19 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-07-31 16:15:19 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-07-31 16:15:19 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-07-31 16:15:19 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-07-31 16:15:20 - src.models.model_factory - INFO - Best model: rf (CV: 0.8428)
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-07-31 16:15:20 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-07-31 16:15:20 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-07-31 16:15:21 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-07-31 16:15:21 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-07-31 16:15:21 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-07-31 16:15:21 - __main__ - INFO - 
+================================================================================
+2025-07-31 16:15:21 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-07-31 16:15:21 - __main__ - INFO - ================================================================================
+2025-07-31 16:15:21 - __main__ - INFO - Best Model: rf
+2025-07-31 16:15:21 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-07-31 16:15:21 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-07-31 16:15:21 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-07-31 16:15:21 - __main__ - INFO - Results saved to: outputs
+2025-07-31 16:15:21 - __main__ - INFO - ================================================================================
+2025-07-31 16:15:21 - __main__ - INFO - Pipeline completed successfully!
+2025-08-16 18:19:30 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-16 18:19:30 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-16 18:19:30 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-16 18:19:30 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-16 18:19:30 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-16 18:19:30 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-16 18:19:31 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-16 18:19:31 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-16 18:19:31 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-16 18:19:31 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-16 18:19:31 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-16 18:19:31 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-16 18:19:31 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-16 18:19:31 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-16 18:19:32 - src.models.model_factory - INFO - Best model: rf (CV: 0.8428)
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-16 18:19:32 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-16 18:19:33 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-16 18:19:33 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-16 18:19:33 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-16 18:19:33 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-16 18:19:33 - __main__ - INFO - 
+================================================================================
+2025-08-16 18:19:33 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-16 18:19:33 - __main__ - INFO - ================================================================================
+2025-08-16 18:19:33 - __main__ - INFO - Best Model: rf
+2025-08-16 18:19:33 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-16 18:19:33 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-16 18:19:33 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-16 18:19:33 - __main__ - INFO - Results saved to: outputs
+2025-08-16 18:19:33 - __main__ - INFO - ================================================================================
+2025-08-16 18:19:33 - __main__ - INFO - Pipeline completed successfully!
+2025-08-16 18:21:19 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-16 18:21:19 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-16 18:21:19 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-16 18:21:19 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-16 18:21:19 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-16 18:21:19 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-16 18:21:20 - src.models.model_factory - INFO - rf - CV: 0.8332, Gap: 0.0320
+2025-08-16 18:21:20 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-16 18:21:20 - src.models.model_factory - INFO - xgb - CV: 0.7592, Gap: 0.0012
+2025-08-16 18:21:20 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-16 18:21:20 - src.models.model_factory - INFO - lgb - CV: 0.7881, Gap: -0.0216
+2025-08-16 18:21:20 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-16 18:21:20 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-16 18:21:20 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-08-16 18:21:20 - src.models.model_factory - INFO - Best model: ensemble (CV: 0.8347)
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.321
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-16 18:21:20 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-16 18:21:21 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-16 18:21:21 - src.utils.metrics - INFO - Generating detailed evaluation report for ensemble
+2025-08-16 18:21:21 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-16 18:21:21 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-16 18:21:21 - __main__ - INFO - 
+================================================================================
+2025-08-16 18:21:21 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-16 18:21:21 - __main__ - INFO - ================================================================================
+2025-08-16 18:21:21 - __main__ - INFO - Best Model: ensemble
+2025-08-16 18:21:21 - __main__ - INFO - Cross-Validation Score: 0.8347
+2025-08-16 18:21:21 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-16 18:21:21 - __main__ - INFO - Predicted Survival Rate: 0.321
+2025-08-16 18:21:21 - __main__ - INFO - Results saved to: outputs
+2025-08-16 18:21:21 - __main__ - INFO - ================================================================================
+2025-08-16 18:21:21 - __main__ - INFO - Pipeline completed successfully!
+2025-08-16 18:30:27 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-16 18:30:27 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-16 18:30:27 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-16 18:30:27 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-16 18:30:27 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-16 18:30:27 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-16 18:30:28 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-16 18:30:28 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-16 18:30:28 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-16 18:30:28 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-16 18:30:28 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-16 18:30:28 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-16 18:30:28 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-16 18:30:28 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-16 18:30:29 - src.models.model_factory - INFO - Best model: rf (CV: 0.8428)
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-16 18:30:29 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-16 18:30:30 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-16 18:30:30 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-16 18:30:30 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-16 18:30:30 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-16 18:30:30 - __main__ - INFO - 
+================================================================================
+2025-08-16 18:30:30 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-16 18:30:30 - __main__ - INFO - ================================================================================
+2025-08-16 18:30:30 - __main__ - INFO - Best Model: rf
+2025-08-16 18:30:30 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-16 18:30:30 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-16 18:30:30 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-16 18:30:30 - __main__ - INFO - Results saved to: outputs
+2025-08-16 18:30:30 - __main__ - INFO - ================================================================================
+2025-08-16 18:30:30 - __main__ - INFO - Pipeline completed successfully!
+2025-08-17 16:04:20 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-17 16:04:20 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-17 16:04:20 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-17 16:04:20 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-17 16:04:20 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-17 16:04:20 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-17 16:04:20 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-17 16:04:20 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-17 16:04:20 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-17 16:04:20 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-17 16:04:21 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-17 16:04:21 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-17 16:04:21 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-17 16:04:21 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-17 16:04:21 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8428) instead of rf (CV: 0.8428)
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-17 16:04:21 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-17 16:04:22 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-17 16:04:22 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-17 16:04:22 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-17 16:04:22 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-17 16:04:22 - __main__ - INFO - 
+================================================================================
+2025-08-17 16:04:22 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-17 16:04:22 - __main__ - INFO - ================================================================================
+2025-08-17 16:04:22 - __main__ - INFO - Best Model: rf
+2025-08-17 16:04:22 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-17 16:04:22 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-17 16:04:22 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-17 16:04:22 - __main__ - INFO - Results saved to: outputs
+2025-08-17 16:04:22 - __main__ - INFO - ================================================================================
+2025-08-17 16:04:22 - __main__ - INFO - Pipeline completed successfully!
+2025-08-17 16:05:10 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-17 16:05:10 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-17 16:05:10 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-17 16:05:10 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-17 16:05:10 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-17 16:05:10 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-17 16:05:10 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-17 16:05:10 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-17 16:05:10 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-17 16:05:10 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-17 16:05:10 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-17 16:05:10 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-17 16:05:10 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-17 16:05:10 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-17 16:05:11 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8428) instead of rf (CV: 0.8428)
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-17 16:05:11 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-17 16:05:12 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-17 16:05:12 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-17 16:05:12 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-17 16:05:12 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-17 16:05:12 - __main__ - INFO - 
+================================================================================
+2025-08-17 16:05:12 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-17 16:05:12 - __main__ - INFO - ================================================================================
+2025-08-17 16:05:12 - __main__ - INFO - Best Model: rf
+2025-08-17 16:05:12 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-17 16:05:12 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-17 16:05:12 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-17 16:05:12 - __main__ - INFO - Results saved to: outputs
+2025-08-17 16:05:12 - __main__ - INFO - ================================================================================
+2025-08-17 16:05:12 - __main__ - INFO - Pipeline completed successfully!
+2025-08-21 20:13:43 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-21 20:13:43 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-21 20:13:43 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-21 20:13:43 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-21 20:13:43 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-21 20:13:43 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-21 20:13:43 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-21 20:13:43 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-21 20:13:44 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-21 20:13:44 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-21 20:13:44 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-21 20:13:44 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-21 20:13:44 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-21 20:13:44 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-21 20:13:45 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8428) instead of rf (CV: 0.8428)
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-21 20:13:45 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-21 20:13:45 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-21 20:13:45 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-21 20:13:45 - __main__ - INFO - 
+================================================================================
+2025-08-21 20:13:45 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-21 20:13:45 - __main__ - INFO - ================================================================================
+2025-08-21 20:13:45 - __main__ - INFO - Best Model: rf
+2025-08-21 20:13:45 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-21 20:13:45 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-21 20:13:45 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-21 20:13:45 - __main__ - INFO - Results saved to: outputs
+2025-08-21 20:13:45 - __main__ - INFO - ================================================================================
+2025-08-21 20:13:45 - __main__ - INFO - Pipeline completed successfully!
+2025-08-21 20:16:16 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-21 20:16:16 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-21 20:16:16 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-21 20:16:16 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-21 20:16:16 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-21 20:16:16 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-21 20:16:17 - src.models.model_factory - INFO - rf - CV: 0.8428, Gap: 0.0287
+2025-08-21 20:16:17 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-21 20:16:17 - src.models.model_factory - INFO - xgb - CV: 0.7640, Gap: -0.0051
+2025-08-21 20:16:17 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-21 20:16:17 - src.models.model_factory - INFO - lgb - CV: 0.7769, Gap: -0.0339
+2025-08-21 20:16:17 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-21 20:16:17 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-21 20:16:17 - src.models.model_factory - INFO - Creating ensemble with models: ['rf', 'xgb', 'lgb', 'lr']
+2025-08-21 20:16:18 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8428) instead of rf (CV: 0.8428)
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.306
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-21 20:16:18 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-21 20:16:18 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-21 20:16:18 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-21 20:16:18 - __main__ - INFO - 
+================================================================================
+2025-08-21 20:16:18 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-21 20:16:18 - __main__ - INFO - ================================================================================
+2025-08-21 20:16:18 - __main__ - INFO - Best Model: rf
+2025-08-21 20:16:18 - __main__ - INFO - Cross-Validation Score: 0.8428
+2025-08-21 20:16:18 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-21 20:16:18 - __main__ - INFO - Predicted Survival Rate: 0.306
+2025-08-21 20:16:18 - __main__ - INFO - Results saved to: outputs
+2025-08-21 20:16:18 - __main__ - INFO - ================================================================================
+2025-08-21 20:16:18 - __main__ - INFO - Pipeline completed successfully!
+2025-08-21 20:20:11 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-21 20:20:11 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-21 20:20:11 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-21 20:20:11 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-21 20:20:11 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-21 20:20:11 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-21 20:20:12 - src.models.model_factory - INFO - rf - CV: 0.8332, Gap: 0.0320
+2025-08-21 20:20:12 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-21 20:20:12 - src.models.model_factory - INFO - xgb - CV: 0.7592, Gap: 0.0012
+2025-08-21 20:20:12 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-21 20:20:12 - src.models.model_factory - INFO - lgb - CV: 0.7881, Gap: -0.0216
+2025-08-21 20:20:12 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-21 20:20:12 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-21 20:20:12 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-08-21 20:20:12 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8332) instead of ensemble (CV: 0.8347)
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.304
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-21 20:20:12 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-21 20:20:13 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-21 20:20:13 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-21 20:20:13 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-21 20:20:13 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-21 20:20:13 - __main__ - INFO - 
+================================================================================
+2025-08-21 20:20:13 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-21 20:20:13 - __main__ - INFO - ================================================================================
+2025-08-21 20:20:13 - __main__ - INFO - Best Model: rf
+2025-08-21 20:20:13 - __main__ - INFO - Cross-Validation Score: 0.8332
+2025-08-21 20:20:13 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-21 20:20:13 - __main__ - INFO - Predicted Survival Rate: 0.304
+2025-08-21 20:20:13 - __main__ - INFO - Results saved to: outputs
+2025-08-21 20:20:13 - __main__ - INFO - ================================================================================
+2025-08-21 20:20:13 - __main__ - INFO - Pipeline completed successfully!
+2025-08-21 20:21:17 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-21 20:21:17 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-21 20:21:17 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-21 20:21:17 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-21 20:21:17 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-21 20:21:17 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-21 20:21:18 - src.models.model_factory - INFO - rf - CV: 0.8332, Gap: 0.0320
+2025-08-21 20:21:18 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-21 20:21:18 - src.models.model_factory - INFO - xgb - CV: 0.7592, Gap: 0.0012
+2025-08-21 20:21:18 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-21 20:21:18 - src.models.model_factory - INFO - lgb - CV: 0.7881, Gap: -0.0216
+2025-08-21 20:21:18 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-21 20:21:18 - src.models.model_factory - INFO - lr - CV: 0.7913, Gap: 0.0152
+2025-08-21 20:21:18 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-08-21 20:21:18 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8332) instead of ensemble (CV: 0.8347)
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.304
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-21 20:21:18 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-21 20:21:19 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-21 20:21:19 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-21 20:21:19 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-21 20:21:19 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-21 20:21:19 - __main__ - INFO - 
+================================================================================
+2025-08-21 20:21:19 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-21 20:21:19 - __main__ - INFO - ================================================================================
+2025-08-21 20:21:19 - __main__ - INFO - Best Model: rf
+2025-08-21 20:21:19 - __main__ - INFO - Cross-Validation Score: 0.8332
+2025-08-21 20:21:19 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-21 20:21:19 - __main__ - INFO - Predicted Survival Rate: 0.304
+2025-08-21 20:21:19 - __main__ - INFO - Results saved to: outputs
+2025-08-21 20:21:19 - __main__ - INFO - ================================================================================
+2025-08-21 20:21:19 - __main__ - INFO - Pipeline completed successfully!
