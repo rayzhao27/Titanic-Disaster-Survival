@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple, Any
 from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, average_precision_score
 from sklearn.model_selection import cross_val_score
 import xgboost as xgb
 import lightgbm as lgb
@@ -36,32 +36,63 @@ class ModelFactory:
             # Fit model
             model.fit(X_train, y_train)
 
-            # Predictions
+            # Hard predictions
             y_pred_train = model.predict(X_train)
             y_pred_val = model.predict(X_val)
 
-            # Metrics
+            # Probability predictions
+            try:
+                y_pred_proba_train = model.predict_proba(X_train)[:, 1]
+                y_pred_proba_val = model.predict_proba(X_val)[:, 1]
+                has_proba = True
+            except:
+                logger.warning(f"Model {name} doesn't support predict_proba")
+                y_pred_proba_train = y_pred_train.astype(float)
+                y_pred_proba_val = y_pred_val.astype(float)
+                has_proba = False
+
+            # Basic metrics
             train_acc = accuracy_score(y_train, y_pred_train)
             val_acc = accuracy_score(y_val, y_pred_val)
+            
+            # Advanced metrics with probabilities
+            train_f1 = f1_score(y_train, y_pred_train)
+            val_f1 = f1_score(y_val, y_pred_val)
+            
+            train_roc_auc = roc_auc_score(y_train, y_pred_proba_train) if has_proba else None
+            val_roc_auc = roc_auc_score(y_val, y_pred_proba_val) if has_proba else None
+            
+            train_pr_auc = average_precision_score(y_train, y_pred_proba_train) if has_proba else None
+            val_pr_auc = average_precision_score(y_val, y_pred_proba_val) if has_proba else None
 
-            # Cross-validation
-            cv_scores = cross_val_score(
-                model, X_train, y_train,
-                cv=self.config.cv_folds,
-                scoring='accuracy'
-            )
+            # Cross-validation with multiple metrics
+            cv_accuracy = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='accuracy')
+            cv_f1 = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='f1')
+            cv_roc_auc = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='roc_auc') if has_proba else None
 
             results[name] = {
                 'model': model,
                 'train_accuracy': train_acc,
                 'val_accuracy': val_acc,
-                'cv_score': cv_scores.mean(),
-                'cv_std': cv_scores.std(),
+                'train_f1': train_f1,
+                'val_f1': val_f1,
+                'train_roc_auc': train_roc_auc,
+                'val_roc_auc': val_roc_auc,
+                'train_pr_auc': train_pr_auc,
+                'val_pr_auc': val_pr_auc,
+                'cv_score': cv_accuracy.mean(),
+                'cv_std': cv_accuracy.std(),
+                'cv_f1': cv_f1.mean() if cv_f1 is not None else None,
+                'cv_roc_auc': cv_roc_auc.mean() if cv_roc_auc is not None else None,
                 'overfitting_gap': train_acc - val_acc,
-                'is_overfitting': train_acc - val_acc > self.config.overfitting_threshold
+                'is_overfitting': train_acc - val_acc > self.config.overfitting_threshold,
+                'has_proba': has_proba,
+                'y_pred_proba_val': y_pred_proba_val  # Store for threshold optimization
             }
 
-            logger.info(f"{name} - CV: {cv_scores.mean():.4f}, Gap: {train_acc - val_acc:.4f}")
+            roc_auc_str = f"{val_roc_auc:.4f}" if val_roc_auc else "N/A"
+            pr_auc_str = f"{val_pr_auc:.4f}" if val_pr_auc else "N/A"
+            logger.info(f"{name} - CV: {cv_accuracy.mean():.4f}, F1: {val_f1:.4f}, ROC-AUC: {roc_auc_str}, PR-AUC: {pr_auc_str}")
 
         return results
 
@@ -91,25 +122,56 @@ class ModelFactory:
 
         ensemble.fit(X_train, y_train)
 
+        # Hard predictions
         y_pred_train = ensemble.predict(X_train)
         y_pred_val = ensemble.predict(X_val)
 
+        # Probability predictions
+        try:
+            y_pred_proba_train = ensemble.predict_proba(X_train)[:, 1]
+            y_pred_proba_val = ensemble.predict_proba(X_val)[:, 1]
+            has_proba = True
+        except:
+            y_pred_proba_train = y_pred_train.astype(float)
+            y_pred_proba_val = y_pred_val.astype(float)
+            has_proba = False
+
+        # Metrics
         train_acc = accuracy_score(y_train, y_pred_train)
         val_acc = accuracy_score(y_val, y_pred_val)
+        
+        train_f1 = f1_score(y_train, y_pred_train)
+        val_f1 = f1_score(y_val, y_pred_val)
+        
+        train_roc_auc = roc_auc_score(y_train, y_pred_proba_train) if has_proba else None
+        val_roc_auc = roc_auc_score(y_val, y_pred_proba_val) if has_proba else None
+        
+        train_pr_auc = average_precision_score(y_train, y_pred_proba_train) if has_proba else None
+        val_pr_auc = average_precision_score(y_val, y_pred_proba_val) if has_proba else None
 
-        cv_scores = cross_val_score(
-            ensemble, X_train, y_train,
-            cv=self.config.cv_folds
-        )
+        # Cross-validation
+        cv_accuracy = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='accuracy')
+        cv_f1 = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='f1')
+        cv_roc_auc = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='roc_auc') if has_proba else None
 
         ensemble_results = {
             'model': ensemble,
             'train_accuracy': train_acc,
             'val_accuracy': val_acc,
-            'cv_score': cv_scores.mean(),
-            'cv_std': cv_scores.std(),
+            'train_f1': train_f1,
+            'val_f1': val_f1,
+            'train_roc_auc': train_roc_auc,
+            'val_roc_auc': val_roc_auc,
+            'train_pr_auc': train_pr_auc,
+            'val_pr_auc': val_pr_auc,
+            'cv_score': cv_accuracy.mean(),
+            'cv_std': cv_accuracy.std(),
+            'cv_f1': cv_f1.mean() if cv_f1 is not None else None,
+            'cv_roc_auc': cv_roc_auc.mean() if cv_roc_auc is not None else None,
             'overfitting_gap': train_acc - val_acc,
-            'is_overfitting': train_acc - val_acc > self.config.overfitting_threshold
+            'is_overfitting': train_acc - val_acc > self.config.overfitting_threshold,
+            'has_proba': has_proba,
+            'y_pred_proba_val': y_pred_proba_val
         }
 
         return ensemble, ensemble_results
@@ -120,6 +182,21 @@ class ModelFactory:
         best_model_name = max(model_results.keys(),
                               key=lambda k: model_results[k]['cv_score'])
         best_results = model_results[best_model_name]
+        
+        # Log comprehensive performance summary
+        logger.info("\n" + "="*60)
+        logger.info("MODEL PERFORMANCE SUMMARY")
+        logger.info("="*60)
+        for name, results in model_results.items():
+            logger.info(f"{name.upper()}:")
+            logger.info(f"  CV Accuracy: {results['cv_score']:.4f}")
+            logger.info(f"  Val F1: {results['val_f1']:.4f}")
+            if results['val_roc_auc']:
+                logger.info(f"  Val ROC-AUC: {results['val_roc_auc']:.4f}")
+            if results['val_pr_auc']:
+                logger.info(f"  Val PR-AUC: {results['val_pr_auc']:.4f}")
+            logger.info(f"  Overfitting Gap: {results['overfitting_gap']:.4f}")
+        logger.info("="*60)
         
         # If RF is within 0.002 of the best CV score, use RF for consistency with original
         if rf_results and abs(rf_results['cv_score'] - best_results['cv_score']) <= 0.002:

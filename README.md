@@ -108,8 +108,9 @@ Titanic-ML-Pipeline/
 
 - **`metrics.py`**: Comprehensive model evaluation
   - Classification metrics (accuracy, precision, recall, F1)
+  - Advanced metrics (ROC-AUC, PR-AUC)
+  - Threshold optimization (Youden J statistic, F1 maximization)
   - Business metrics (survival rates, confusion analysis)
-  - ROC AUC and detailed classification reports
 
 - **`visualization.py`**: Training progress and model comparison
   - Model performance comparison charts
@@ -275,6 +276,10 @@ The pipeline evaluates multiple algorithms and selects the best performer:
 
 - **Cross-Validation Score**: 83.32%
 - **Validation Accuracy**: 81.72%
+- **F1-Score**: 0.81
+- **ROC-AUC**: 0.87
+- **PR-AUC**: 0.84
+- **Optimal Threshold**: 0.358 (Youden J statistic)
 - **Overfitting Detection**: Automatic gap analysis
 - **Feature Selection**: Top 7 most predictive features
 

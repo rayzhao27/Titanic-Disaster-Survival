@@ -74,31 +74,25 @@ class MLPipeline:
 
         logger.info("Applying feature engineering...")
 
-        # Use original processing exactly to ensure compatibility
-        from helper_functions import resolve_missing_values, feature_engineering, feature_expanding
-        
+        # Use feature pipeline for processing
         combined_data = pd.concat([train_data, test_data], sort=True).reset_index(drop=True)
-        combined_data = resolve_missing_values(combined_data)
-        combined_data = feature_engineering(combined_data)
 
-        train_processed, test_processed = combined_data.loc[:890], combined_data.loc[891:].drop(['Survived'], axis=1)
+        # Create and fit feature pipeline
+        self.feature_pipeline = create_feature_pipeline()
+        combined_processed = self.feature_pipeline.fit_transform(combined_data)
 
-        train_processed = feature_expanding(train_processed)
-        test_processed = feature_expanding(test_processed)
-
-        # Original align operation
-        train_processed, test_processed = train_processed.align(test_processed, join='left', axis=1, fill_value=0)
-
-        test_ids = test_processed['PassengerId'].copy()
-
-        # Remove PassengerId from both
-        train_processed.drop(columns=['PassengerId'], inplace=True)
-        test_processed.drop(columns=['PassengerId'], inplace=True)
+        train_processed = combined_processed.iloc[:len(train_data)]
+        test_processed = combined_processed.iloc[len(train_data):]
 
         # Separate features and target
-        X_train = train_processed.drop('Survived', axis=1)
-        y_train = train_processed['Survived']
-        X_test = test_processed.drop(columns=['Survived'], errors='ignore')
+        X_train = train_processed.drop(['Survived', 'PassengerId'], axis=1, errors='ignore')
+        y_train = train_processed['Survived'] if 'Survived' in train_processed.columns else None
+
+        X_test = test_processed.drop(['Survived', 'PassengerId'], axis=1, errors='ignore')
+        test_ids = test_data['PassengerId'].copy()
+        
+        # Align train and test sets to ensure same columns
+        X_train, X_test = X_train.align(X_test, join='left', axis=1, fill_value=0)
 
         logger.info(f"Feature engineering completed. Train shape: {X_train.shape}, Test shape: {X_test.shape}")
 
@@ -242,9 +236,22 @@ class MLPipeline:
         # Generate model comparison visualization
         visualizer.plot_model_comparison(self.model_results)
 
-        # Generate detailed evaluation report
+        # Generate detailed evaluation report with probabilities
         y_pred_val = self.model.predict(X_val)
-        evaluation_report = evaluator.generate_detailed_report(y_val, y_pred_val, self.best_model_name)
+        
+        # Get probability predictions if available
+        try:
+            y_pred_proba_val = self.model.predict_proba(X_val)[:, 1]
+        except:
+            logger.warning("Model doesn't support predict_proba, using hard predictions")
+            y_pred_proba_val = None
+        
+        evaluation_report = evaluator.generate_detailed_report(y_val, y_pred_val, self.best_model_name, y_pred_proba_val)
+        
+        # Add threshold analysis if probabilities are available
+        if y_pred_proba_val is not None:
+            threshold_analysis = evaluator.threshold_analysis(y_val, y_pred_proba_val)
+            evaluation_report['threshold_analysis'] = threshold_analysis
 
         # Save evaluation report
         report_path = os.path.join(self.config.data.output_dir, 'evaluation_report.json')

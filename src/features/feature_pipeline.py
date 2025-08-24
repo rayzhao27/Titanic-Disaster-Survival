@@ -128,18 +128,33 @@ class Preprocessor(BaseEstimator, TransformerMixin):
         family_survival = pd.Series(0.5, index=df.index)
 
         if 'Name' in df.columns and 'Fare' in df.columns and 'Survived' in df.columns:
+            df = df.copy()
             df['Last_Name'] = df['Name'].apply(lambda x: str.split(x, ",")[0])
 
-            for grp, grp_df in df.groupby(['Last_Name', 'Fare']):
-                if len(grp_df) > 1:
-                    for idx in grp_df.index:
-                        other_members = grp_df.drop(idx)
-                        if len(other_members) > 0:
-                            survival_rate = other_members['Survived'].mean()
-                            if survival_rate == 1.0:
-                                family_survival.loc[idx] = 1.0
-                            elif survival_rate == 0.0:
-                                family_survival.loc[idx] = 0.0
+            # First pass: group by last name and fare (same as original)
+            for grp, grp_df in df[['Survived', 'Name', 'Last_Name', 'Fare', 'Ticket', 'PassengerId',
+                                   'SibSp', 'Parch', 'Age', 'Cabin']].groupby(['Last_Name', 'Fare']):
+                if len(grp_df) != 1:
+                    # A Family group exists
+                    for ind, row in grp_df.iterrows():
+                        smax = grp_df.drop(ind)['Survived'].max()
+                        smin = grp_df.drop(ind)['Survived'].min()
+                        if smax == 1.0:
+                            family_survival.loc[ind] = 1.0
+                        elif smin == 0.0:
+                            family_survival.loc[ind] = 0.0
+
+            # Second pass: group by ticket (this was missing in the new version!)
+            for _, grp_df in df.groupby('Ticket'):
+                if len(grp_df) != 1:
+                    for ind, row in grp_df.iterrows():
+                        if (family_survival.loc[ind] == 0.0) or (family_survival.loc[ind] == 0.5):
+                            smax = grp_df.drop(ind)['Survived'].max()
+                            smin = grp_df.drop(ind)['Survived'].min()
+                            if smax == 1.0:
+                                family_survival.loc[ind] = 1.0
+                            elif smin == 0.0:
+                                family_survival.loc[ind] = 0.0
 
         return family_survival
 

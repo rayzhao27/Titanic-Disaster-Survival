@@ -534,3 +534,183 @@
 2025-08-21 20:21:19 - __main__ - INFO - Results saved to: outputs
 2025-08-21 20:21:19 - __main__ - INFO - ================================================================================
 2025-08-21 20:21:19 - __main__ - INFO - Pipeline completed successfully!
+2025-08-24 15:22:08 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-24 15:22:08 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-24 15:22:08 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-24 15:22:08 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-24 15:22:08 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-24 15:22:08 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-24 15:22:08 - __main__ - ERROR - Pipeline failed with error: No module named 'helper_functions'
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 61, in main
+    results = pipeline.run()
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 40, in run
+    X_train, X_test, y_train, test_ids = self._prepare_features(train_data, test_data)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 78, in _prepare_features
+    from helper_functions import resolve_missing_values, feature_engineering, feature_expanding
+ModuleNotFoundError: No module named 'helper_functions'
+2025-08-24 15:22:56 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-24 15:22:56 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-24 15:22:56 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-24 15:22:56 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-24 15:22:56 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-24 15:22:56 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-24 15:22:58 - __main__ - ERROR - Pipeline failed with error: Invalid format specifier
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 61, in main
+    results = pipeline.run()
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 47, in run
+    self._train_and_evaluate_models(X_train_processed, y_train_split, X_val_processed, y_val)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 172, in _train_and_evaluate_models
+    self.model_results = model_factory.evaluate_models(base_models, X_train, y_train, X_val, y_val)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/models/model_factory.py", line 93, in evaluate_models
+    logger.info(f"{name} - CV: {cv_accuracy.mean():.4f}, F1: {val_f1:.4f}, ROC-AUC: {val_roc_auc:.4f if val_roc_auc else 'N/A'}, PR-AUC: {val_pr_auc:.4f if val_pr_auc else 'N/A'}")
+ValueError: Invalid format specifier
+2025-08-24 15:23:18 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-24 15:23:18 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-24 15:23:18 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-24 15:23:18 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-24 15:23:18 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-24 15:23:18 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-24 15:23:19 - src.models.model_factory - INFO - rf - CV: 0.8332, F1: 0.7232, ROC-AUC: 0.8731, PR-AUC: 0.8406
+2025-08-24 15:23:19 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-24 15:23:19 - src.models.model_factory - INFO - xgb - CV: 0.7592, F1: 0.5556, ROC-AUC: 0.8561, PR-AUC: 0.8235
+2025-08-24 15:23:19 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-24 15:23:20 - src.models.model_factory - INFO - lgb - CV: 0.7881, F1: 0.6792, ROC-AUC: 0.8639, PR-AUC: 0.8286
+2025-08-24 15:23:20 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-24 15:23:20 - src.models.model_factory - INFO - lr - CV: 0.7913, F1: 0.7000, ROC-AUC: 0.8359, PR-AUC: 0.7636
+2025-08-24 15:23:20 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-08-24 15:23:20 - src.models.model_factory - INFO - 
+============================================================
+2025-08-24 15:23:20 - src.models.model_factory - INFO - MODEL PERFORMANCE SUMMARY
+2025-08-24 15:23:20 - src.models.model_factory - INFO - ============================================================
+2025-08-24 15:23:20 - src.models.model_factory - INFO - RF:
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   CV Accuracy: 0.8332
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val F1: 0.7232
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8731
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val PR-AUC: 0.8406
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Overfitting Gap: 0.0320
+2025-08-24 15:23:20 - src.models.model_factory - INFO - XGB:
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   CV Accuracy: 0.7592
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val F1: 0.5556
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8561
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val PR-AUC: 0.8235
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Overfitting Gap: 0.0012
+2025-08-24 15:23:20 - src.models.model_factory - INFO - LGB:
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   CV Accuracy: 0.7881
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val F1: 0.6792
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8639
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val PR-AUC: 0.8286
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Overfitting Gap: -0.0216
+2025-08-24 15:23:20 - src.models.model_factory - INFO - LR:
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   CV Accuracy: 0.7913
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val F1: 0.7000
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8359
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Val PR-AUC: 0.7636
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   Overfitting Gap: 0.0152
+2025-08-24 15:23:20 - src.models.model_factory - INFO - ENSEMBLE:
+2025-08-24 15:23:20 - src.models.model_factory - INFO -   CV Accuracy: 0.8347
+2025-08-24 15:23:20 - __main__ - ERROR - Pipeline failed with error: 'val_f1'
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 61, in main
+    results = pipeline.run()
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 50, in run
+    self.best_model_name, self.model, best_results = self._select_best_model()
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/pipeline/ml_pipeline.py", line 184, in _select_best_model
+    return model_factory.select_best_model(self.model_results)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/models/model_factory.py", line 162, in select_best_model
+    logger.info(f"  Val F1: {results['val_f1']:.4f}")
+KeyError: 'val_f1'
+2025-08-24 15:23:46 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-08-24 15:23:46 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-08-24 15:23:46 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-08-24 15:23:46 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-08-24 15:23:46 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-08-24 15:23:46 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-08-24 15:23:48 - src.models.model_factory - INFO - rf - CV: 0.8332, F1: 0.7232, ROC-AUC: 0.8731, PR-AUC: 0.8406
+2025-08-24 15:23:48 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-08-24 15:23:48 - src.models.model_factory - INFO - xgb - CV: 0.7592, F1: 0.5556, ROC-AUC: 0.8561, PR-AUC: 0.8235
+2025-08-24 15:23:48 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-08-24 15:23:48 - src.models.model_factory - INFO - lgb - CV: 0.7881, F1: 0.6792, ROC-AUC: 0.8639, PR-AUC: 0.8286
+2025-08-24 15:23:48 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-08-24 15:23:48 - src.models.model_factory - INFO - lr - CV: 0.7913, F1: 0.7000, ROC-AUC: 0.8359, PR-AUC: 0.7636
+2025-08-24 15:23:48 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-08-24 15:23:49 - src.models.model_factory - INFO - 
+============================================================
+2025-08-24 15:23:49 - src.models.model_factory - INFO - MODEL PERFORMANCE SUMMARY
+2025-08-24 15:23:49 - src.models.model_factory - INFO - ============================================================
+2025-08-24 15:23:49 - src.models.model_factory - INFO - RF:
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   CV Accuracy: 0.8332
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val F1: 0.7232
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8731
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val PR-AUC: 0.8406
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Overfitting Gap: 0.0320
+2025-08-24 15:23:49 - src.models.model_factory - INFO - XGB:
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   CV Accuracy: 0.7592
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val F1: 0.5556
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8561
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val PR-AUC: 0.8235
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Overfitting Gap: 0.0012
+2025-08-24 15:23:49 - src.models.model_factory - INFO - LGB:
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   CV Accuracy: 0.7881
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val F1: 0.6792
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8639
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val PR-AUC: 0.8286
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Overfitting Gap: -0.0216
+2025-08-24 15:23:49 - src.models.model_factory - INFO - LR:
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   CV Accuracy: 0.7913
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val F1: 0.7000
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8359
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val PR-AUC: 0.7636
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Overfitting Gap: 0.0152
+2025-08-24 15:23:49 - src.models.model_factory - INFO - ENSEMBLE:
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   CV Accuracy: 0.8347
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val F1: 0.7263
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8571
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Val PR-AUC: 0.8205
+2025-08-24 15:23:49 - src.models.model_factory - INFO -   Overfitting Gap: 0.0223
+2025-08-24 15:23:49 - src.models.model_factory - INFO - ============================================================
+2025-08-24 15:23:49 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8332) instead of ensemble (CV: 0.8347)
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.304
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-08-24 15:23:49 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-08-24 15:23:50 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-08-24 15:23:50 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-08-24 15:23:50 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-08-24 15:23:50 - src.utils.metrics - INFO - ROC-AUC: 0.8731, PR-AUC: 0.8406, Optimal Threshold: 0.3582
+2025-08-24 15:23:50 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-08-24 15:23:50 - src.utils.metrics - INFO - F1 optimal threshold: 0.3582 (F1=0.7773)
+2025-08-24 15:23:50 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-08-24 15:23:50 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-08-24 15:23:50 - __main__ - INFO - 
+================================================================================
+2025-08-24 15:23:50 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-08-24 15:23:50 - __main__ - INFO - ================================================================================
+2025-08-24 15:23:50 - __main__ - INFO - Best Model: rf
+2025-08-24 15:23:50 - __main__ - INFO - Cross-Validation Score: 0.8332
+2025-08-24 15:23:50 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-08-24 15:23:50 - __main__ - INFO - Predicted Survival Rate: 0.304
+2025-08-24 15:23:50 - __main__ - INFO - Results saved to: outputs
+2025-08-24 15:23:50 - __main__ - INFO - ================================================================================
+2025-08-24 15:23:50 - __main__ - INFO - Pipeline completed successfully!
