@@ -1,18 +1,18 @@
+import logging
+import xgboost as xgb
+import lightgbm as lgb
+
 from typing import Dict, List, Tuple, Any
 from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, average_precision_score
 from sklearn.model_selection import cross_val_score
-import xgboost as xgb
-import lightgbm as lgb
-import logging
+
 
 logger = logging.getLogger(__name__)
 
 
 class ModelFactory:
-    """Factory class for creating and managing ML models"""
-
     def __init__(self, config: 'ModelConfig'):
         self.config = config
 
@@ -33,14 +33,11 @@ class ModelFactory:
         for name, model in models:
             logger.info(f"Training and evaluating {name}...")
 
-            # Fit model
             model.fit(X_train, y_train)
 
-            # Hard predictions
             y_pred_train = model.predict(X_train)
             y_pred_val = model.predict(X_val)
 
-            # Probability predictions
             try:
                 y_pred_proba_train = model.predict_proba(X_train)[:, 1]
                 y_pred_proba_val = model.predict_proba(X_val)[:, 1]
@@ -51,11 +48,9 @@ class ModelFactory:
                 y_pred_proba_val = y_pred_val.astype(float)
                 has_proba = False
 
-            # Basic metrics
             train_acc = accuracy_score(y_train, y_pred_train)
             val_acc = accuracy_score(y_val, y_pred_val)
-            
-            # Advanced metrics with probabilities
+
             train_f1 = f1_score(y_train, y_pred_train)
             val_f1 = f1_score(y_val, y_pred_val)
             
@@ -65,7 +60,6 @@ class ModelFactory:
             train_pr_auc = average_precision_score(y_train, y_pred_proba_train) if has_proba else None
             val_pr_auc = average_precision_score(y_val, y_pred_proba_val) if has_proba else None
 
-            # Cross-validation with multiple metrics
             cv_accuracy = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='accuracy')
             cv_f1 = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='f1')
             cv_roc_auc = cross_val_score(model, X_train, y_train, cv=self.config.cv_folds, scoring='roc_auc') if has_proba else None
@@ -99,7 +93,6 @@ class ModelFactory:
     def create_ensemble(self, model_results: Dict[str, Dict[str, float]],
                         X_train, y_train, X_val, y_val) -> Tuple[Any, Dict[str, float]]:
 
-        # Select models that aren't overfitting
         good_models = [
             (name, results['model'])
             for name, results in model_results.items()
@@ -112,7 +105,6 @@ class ModelFactory:
                                   key=lambda k: model_results[k]['cv_score'])
             return model_results[best_model_name]['model'], model_results[best_model_name]
 
-        # Create voting classifier
         ensemble = VotingClassifier(
             estimators=good_models,
             voting=self.config.ensemble_voting
@@ -122,11 +114,9 @@ class ModelFactory:
 
         ensemble.fit(X_train, y_train)
 
-        # Hard predictions
         y_pred_train = ensemble.predict(X_train)
         y_pred_val = ensemble.predict(X_val)
 
-        # Probability predictions
         try:
             y_pred_proba_train = ensemble.predict_proba(X_train)[:, 1]
             y_pred_proba_val = ensemble.predict_proba(X_val)[:, 1]
@@ -136,7 +126,6 @@ class ModelFactory:
             y_pred_proba_val = y_pred_val.astype(float)
             has_proba = False
 
-        # Metrics
         train_acc = accuracy_score(y_train, y_pred_train)
         val_acc = accuracy_score(y_val, y_pred_val)
         
@@ -149,7 +138,6 @@ class ModelFactory:
         train_pr_auc = average_precision_score(y_train, y_pred_proba_train) if has_proba else None
         val_pr_auc = average_precision_score(y_val, y_pred_proba_val) if has_proba else None
 
-        # Cross-validation
         cv_accuracy = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='accuracy')
         cv_f1 = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='f1')
         cv_roc_auc = cross_val_score(ensemble, X_train, y_train, cv=self.config.cv_folds, scoring='roc_auc') if has_proba else None
@@ -177,13 +165,11 @@ class ModelFactory:
         return ensemble, ensemble_results
 
     def select_best_model(self, model_results: Dict[str, Dict[str, float]]) -> Tuple[str, Any, Dict[str, float]]:
-        # For compatibility with original version, prefer RF if it's close to the best
         rf_results = model_results.get('rf')
         best_model_name = max(model_results.keys(),
                               key=lambda k: model_results[k]['cv_score'])
         best_results = model_results[best_model_name]
         
-        # Log comprehensive performance summary
         logger.info("\n" + "="*60)
         logger.info("MODEL PERFORMANCE SUMMARY")
         logger.info("="*60)
@@ -198,7 +184,6 @@ class ModelFactory:
             logger.info(f"  Overfitting Gap: {results['overfitting_gap']:.4f}")
         logger.info("="*60)
         
-        # If RF is within 0.002 of the best CV score, use RF for consistency with original
         if rf_results and abs(rf_results['cv_score'] - best_results['cv_score']) <= 0.002:
             logger.info(f"Using RF model for consistency (CV: {rf_results['cv_score']:.4f}) instead of {best_model_name} (CV: {best_results['cv_score']:.4f})")
             return 'rf', rf_results['model'], rf_results

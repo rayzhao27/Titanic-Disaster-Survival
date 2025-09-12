@@ -2,8 +2,9 @@ import logging
 import argparse
 from pathlib import Path
 import sys
+import json
 
-# Add src to path
+
 sys.path.append(str(Path(__file__).parent / "src"))
 
 from config.config import Config
@@ -13,9 +14,6 @@ from src.utils.logging_config import setup_logging
 
 
 def main():
-    """Main execution function"""
-
-    # Parse command line arguments
     parser = argparse.ArgumentParser(description='ML Pipeline for Titanic Survival Prediction')
     parser.add_argument('--config', type=str, help='Path to config file')
     parser.add_argument('--train-data', type=str, help='Path to training data')
@@ -28,7 +26,7 @@ def main():
 
     args = parser.parse_args()
 
-    # Setup logging
+
     log_file = Path(args.output_dir) / 'pipeline.log'
     setup_logging(log_level=args.log_level, log_file=str(log_file))
 
@@ -36,10 +34,10 @@ def main():
     logger.info("Starting Titanic ML Pipeline")
 
     try:
-        # Load configuration
+
         config = Config()
 
-        # Override config with command line arguments
+
         if args.train_data:
             config.data.train_path = args.train_data
         if args.test_data:
@@ -47,20 +45,17 @@ def main():
         if args.output_dir:
             config.data.output_dir = args.output_dir
 
-        # Validate input files exist
+
         if not Path(config.data.train_path).exists():
             raise FileNotFoundError(f"Training data not found: {config.data.train_path}")
         if not Path(config.data.test_path).exists():
             raise FileNotFoundError(f"Test data not found: {config.data.test_path}")
 
-        # Create data loader
         data_loader = CSVDataLoader(config.data.train_path, config.data.test_path)
 
-        # Create and run pipeline
         pipeline = MLPipeline(config, data_loader)
         results = pipeline.run()
 
-        # Print summary
         logger.info("\n" + "=" * 80)
         logger.info("PIPELINE EXECUTION SUMMARY")
         logger.info("=" * 80)
@@ -68,6 +63,7 @@ def main():
         logger.info(f"Cross-Validation Score: {results['cv_score']:.4f}")
         logger.info(f"Validation Accuracy: {results['validation_accuracy']:.4f}")
         logger.info(f"Predicted Survival Rate: {results['predictions']['Survived'].mean():.3f}")
+
         logger.info(f"Results saved to: {config.data.output_dir}")
         logger.info("=" * 80)
 
@@ -80,4 +76,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

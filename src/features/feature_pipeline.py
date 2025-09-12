@@ -9,8 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Preprocessor(BaseEstimator, TransformerMixin):
-    """This class combined Missing Values Imputer and Feature Engineering"""
-
     def __init__(self):
         self.median_ages_by_title = {}
         self.median_fare_by_group = {}
@@ -34,7 +32,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
     def fit(self, x: pd.DataFrame, y=None):
         x_titles = self._extract_titles(x)
 
-        # Calculate median ages by title (only for fixed list like original)
         if 'Age' in x_titles.columns and 'Title' in x_titles.columns:
             titles = ['Dr', 'Master', 'Miss', 'Mr', 'Mrs']
             for title in titles:
@@ -43,7 +40,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
                     if median_age is not None:
                         self.median_ages_by_title[title] = median_age
 
-        # Calculate median fares by passenger class and family size
         if 'Fare' in x.columns:
             group_cols = ['Pclass']
             if 'Parch' in x.columns:
@@ -63,25 +59,20 @@ class Preprocessor(BaseEstimator, TransformerMixin):
             x['Cabin'] = x['Cabin'].fillna('Unknown')
 
         if 'Embarked' in x.columns:
-            # Specific imputation for known passengers (original logic)
             if 'Name' in x.columns:
                 x.loc[x['Name'] == 'Icard, Miss. Amelie', 'Embarked'] = 'S'
                 x.loc[x['Name'] == 'Stone, Mrs. George Nelson (Martha Evelyn)', 'Embarked'] = 'S'
-            # Fill remaining missing values with 'S'
             x['Embarked'] = x['Embarked'].fillna('S')
 
         if 'Fare' in x.columns and x['Fare'].isnull().any():
-            # Group-based imputation (original logic)
             x['Fare'] = x.groupby(['Pclass', 'Parch', 'SibSp'])['Fare'].transform(lambda x: x.fillna(x.median()))
 
         """Implement Feature Engineering"""
 
-        # Extract and normalize titles
         if 'Name' in x.columns:
             x['Title'] = x['Name'].str.extract('([A-Za-z]+)\.', expand=False)
             x['Title'] = x['Title'].replace(self.title_mapping)
 
-        # Handle missing ages
         if 'Age' in x.columns and 'Title' in x.columns:
             # Use the same fixed title list as original
             titles = ['Dr', 'Master', 'Miss', 'Mr', 'Mrs']
@@ -91,25 +82,20 @@ class Preprocessor(BaseEstimator, TransformerMixin):
                     mask = (x['Age'].isnull()) & (x['Title'] == title)
                     x.loc[mask, 'Age'] = age_to_impute
 
-        # Create age bins
         if 'Age' in x.columns:
             x['Age_bins'] = pd.qcut(x['Age'], 5, labels=False, duplicates='drop')
 
-        # Create fare bins
         if 'Fare' in x.columns:
             x['Fare_bins'] = pd.qcut(x['Fare'], 4, labels=False, duplicates='drop')
 
-        # Family size feature
         if 'SibSp' in x.columns and 'Parch' in x.columns:
             x['Family_size'] = x['SibSp'] + x['Parch']
 
-        # Family survival feature
         if 'Survived' in x.columns:
             x['Family_Survival'] = self._calculate_family_survival(x)
         else:
             x['Family_Survival'] = 0.5
 
-        # Encode categorical variables
         if 'Sex' in x.columns:
             x['Sex'] = x['Sex'].map({'male': 0, 'female': 1})
 
@@ -131,7 +117,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
             df = df.copy()
             df['Last_Name'] = df['Name'].apply(lambda x: str.split(x, ",")[0])
 
-            # First pass: group by last name and fare (same as original)
             for grp, grp_df in df[['Survived', 'Name', 'Last_Name', 'Fare', 'Ticket', 'PassengerId',
                                    'SibSp', 'Parch', 'Age', 'Cabin']].groupby(['Last_Name', 'Fare']):
                 if len(grp_df) != 1:
@@ -144,7 +129,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
                         elif smin == 0.0:
                             family_survival.loc[ind] = 0.0
 
-            # Second pass: group by ticket (this was missing in the new version!)
             for _, grp_df in df.groupby('Ticket'):
                 if len(grp_df) != 1:
                     for ind, row in grp_df.iterrows():
@@ -160,8 +144,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
 
 
 class FeatureCleaner(BaseEstimator, TransformerMixin):
-    """Remove unnecessary columns"""
-
     def __init__(self, columns_to_drop: Optional[List[str]] = None):
         self.columns_to_drop = columns_to_drop or [
             'Name', 'SibSp', 'Parch', 'Ticket', 'Cabin',
@@ -169,7 +151,6 @@ class FeatureCleaner(BaseEstimator, TransformerMixin):
         ]
 
     def fit(self, X: pd.DataFrame, y=None):
-        # Only keep columns that actually exist
         self.existing_columns_to_drop = [col for col in self.columns_to_drop if col in X.columns]
         return self
 
@@ -178,8 +159,6 @@ class FeatureCleaner(BaseEstimator, TransformerMixin):
 
 
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
-    """One-hot encode categorical variables"""
-
     def __init__(self):
         pass
 

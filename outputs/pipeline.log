@@ -714,3 +714,283 @@ KeyError: 'val_f1'
 2025-08-24 15:23:50 - __main__ - INFO - Results saved to: outputs
 2025-08-24 15:23:50 - __main__ - INFO - ================================================================================
 2025-08-24 15:23:50 - __main__ - INFO - Pipeline completed successfully!
+2025-09-09 14:22:10 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-09 14:22:10 - great_expectations.data_context.data_context.context_factory - INFO - Could not find local file-backed GX project
+2025-09-09 14:22:10 - great_expectations.data_context.types.base - INFO - Created temporary directory '/var/folders/0k/7y9cb8q14l91fh3t441hk91h0000gn/T/tmpt43_jss2' for ephemeral docs site
+2025-09-09 14:22:10 - great_expectations.datasource.fluent.config - INFO - Loading 'datasources' ->
+[]
+2025-09-09 14:22:10 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:22:10 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:22:10 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:22:10 - __main__ - ERROR - Pipeline failed with error: 'age'
+Traceback (most recent call last):
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/indexes/base.py", line 3791, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "index.pyx", line 152, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 181, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7080, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'age'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 69, in main
+    validation_results = validator.validate_batch(train_data)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/validation/data_validation.py", line 32, in validate_batch
+    age_valid = df['age'].between(0, 100).all()
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/indexes/base.py", line 3798, in get_loc
+    raise KeyError(key) from err
+KeyError: 'age'
+2025-09-09 14:25:17 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-09 14:25:17 - great_expectations.data_context.data_context.context_factory - INFO - Could not find local file-backed GX project
+2025-09-09 14:25:17 - great_expectations.data_context.types.base - INFO - Created temporary directory '/var/folders/0k/7y9cb8q14l91fh3t441hk91h0000gn/T/tmpsw_7o_qc' for ephemeral docs site
+2025-09-09 14:25:17 - great_expectations.datasource.fluent.config - INFO - Loading 'datasources' ->
+[]
+2025-09-09 14:25:17 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:25:17 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:25:17 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:25:17 - __main__ - ERROR - Pipeline failed with error: 'age'
+Traceback (most recent call last):
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/indexes/base.py", line 3791, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "index.pyx", line 152, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 181, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7080, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'age'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 69, in main
+    validation_results = validator.validate_batch(train_data)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/validation/data_validation.py", line 32, in validate_batch
+    age_valid = df['age'].between(0, 100).all()
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/frame.py", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/opt/anaconda3/envs/py39/lib/python3.9/site-packages/pandas/core/indexes/base.py", line 3798, in get_loc
+    raise KeyError(key) from err
+KeyError: 'age'
+2025-09-09 14:26:25 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-09 14:26:25 - great_expectations.data_context.data_context.context_factory - INFO - Could not find local file-backed GX project
+2025-09-09 14:26:25 - great_expectations.data_context.types.base - INFO - Created temporary directory '/var/folders/0k/7y9cb8q14l91fh3t441hk91h0000gn/T/tmpf7o2fuxb' for ephemeral docs site
+2025-09-09 14:26:25 - great_expectations.datasource.fluent.config - INFO - Loading 'datasources' ->
+[]
+2025-09-09 14:26:25 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:26:25 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:26:25 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:26:25 - __main__ - ERROR - Pipeline failed with error: Object of type int64 is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 80, in main
+    json.dump(validation_results, f, indent=2)
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/opt/anaconda3/envs/py39/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type int64 is not JSON serializable
+2025-09-09 14:26:55 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-09 14:26:55 - great_expectations.data_context.data_context.context_factory - INFO - Could not find local file-backed GX project
+2025-09-09 14:26:55 - great_expectations.data_context.types.base - INFO - Created temporary directory '/var/folders/0k/7y9cb8q14l91fh3t441hk91h0000gn/T/tmphzp74n0e' for ephemeral docs site
+2025-09-09 14:26:55 - great_expectations.datasource.fluent.config - INFO - Loading 'datasources' ->
+[]
+2025-09-09 14:26:55 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:26:55 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:26:55 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:26:55 - __main__ - ERROR - Pipeline failed with error: [Errno 2] No such file or directory: 'models/reference_stats.json'
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/validation/data_validation.py", line 90, in detect_drift
+    with open(self.reference_stats_path, 'r') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'models/reference_stats.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/main.py", line 83, in main
+    drift_results = drift_detector.detect_drift(train_data)
+  File "/Users/rayzhao/Documents/Kaggle Projects/Titanic - Machine Learning from Disaster/src/validation/data_validation.py", line 94, in detect_drift
+    with open(self.reference_stats_path, 'w') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'models/reference_stats.json'
+2025-09-09 14:27:15 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-09 14:27:15 - great_expectations.data_context.data_context.context_factory - INFO - Could not find local file-backed GX project
+2025-09-09 14:27:15 - great_expectations.data_context.types.base - INFO - Created temporary directory '/var/folders/0k/7y9cb8q14l91fh3t441hk91h0000gn/T/tmpzbtvlvxj' for ephemeral docs site
+2025-09-09 14:27:15 - great_expectations.datasource.fluent.config - INFO - Loading 'datasources' ->
+[]
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-09 14:27:15 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-09-09 14:27:15 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-09-09 14:27:15 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-09-09 14:27:16 - src.models.model_factory - INFO - rf - CV: 0.8332, F1: 0.7232, ROC-AUC: 0.8731, PR-AUC: 0.8406
+2025-09-09 14:27:16 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-09-09 14:27:17 - src.models.model_factory - INFO - xgb - CV: 0.7592, F1: 0.5556, ROC-AUC: 0.8561, PR-AUC: 0.8235
+2025-09-09 14:27:17 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-09-09 14:27:18 - src.models.model_factory - INFO - lgb - CV: 0.7881, F1: 0.6792, ROC-AUC: 0.8639, PR-AUC: 0.8286
+2025-09-09 14:27:18 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-09-09 14:27:18 - src.models.model_factory - INFO - lr - CV: 0.7913, F1: 0.7000, ROC-AUC: 0.8359, PR-AUC: 0.7636
+2025-09-09 14:27:18 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-09-09 14:27:19 - src.models.model_factory - INFO - 
+============================================================
+2025-09-09 14:27:19 - src.models.model_factory - INFO - MODEL PERFORMANCE SUMMARY
+2025-09-09 14:27:19 - src.models.model_factory - INFO - ============================================================
+2025-09-09 14:27:19 - src.models.model_factory - INFO - RF:
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   CV Accuracy: 0.8332
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val F1: 0.7232
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8731
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val PR-AUC: 0.8406
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Overfitting Gap: 0.0320
+2025-09-09 14:27:19 - src.models.model_factory - INFO - XGB:
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   CV Accuracy: 0.7592
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val F1: 0.5556
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8561
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val PR-AUC: 0.8235
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Overfitting Gap: 0.0012
+2025-09-09 14:27:19 - src.models.model_factory - INFO - LGB:
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   CV Accuracy: 0.7881
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val F1: 0.6792
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8639
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val PR-AUC: 0.8286
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Overfitting Gap: -0.0216
+2025-09-09 14:27:19 - src.models.model_factory - INFO - LR:
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   CV Accuracy: 0.7913
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val F1: 0.7000
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8359
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val PR-AUC: 0.7636
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Overfitting Gap: 0.0152
+2025-09-09 14:27:19 - src.models.model_factory - INFO - ENSEMBLE:
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   CV Accuracy: 0.8347
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val F1: 0.7263
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8571
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Val PR-AUC: 0.8205
+2025-09-09 14:27:19 - src.models.model_factory - INFO -   Overfitting Gap: 0.0223
+2025-09-09 14:27:19 - src.models.model_factory - INFO - ============================================================
+2025-09-09 14:27:19 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8332) instead of ensemble (CV: 0.8347)
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.304
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-09-09 14:27:19 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-09-09 14:27:20 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-09-09 14:27:20 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-09-09 14:27:20 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-09-09 14:27:20 - src.utils.metrics - INFO - ROC-AUC: 0.8731, PR-AUC: 0.8406, Optimal Threshold: 0.3582
+2025-09-09 14:27:20 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-09-09 14:27:20 - src.utils.metrics - INFO - F1 optimal threshold: 0.3582 (F1=0.7773)
+2025-09-09 14:27:20 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-09-09 14:27:20 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-09-09 14:27:22 - __main__ - INFO - Model registered as version 2
+2025-09-09 14:27:22 - __main__ - INFO - 
+================================================================================
+2025-09-09 14:27:22 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-09-09 14:27:22 - __main__ - INFO - ================================================================================
+2025-09-09 14:27:22 - __main__ - INFO - Best Model: rf
+2025-09-09 14:27:22 - __main__ - INFO - Cross-Validation Score: 0.8332
+2025-09-09 14:27:22 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-09-09 14:27:22 - __main__ - INFO - Predicted Survival Rate: 0.304
+2025-09-09 14:27:22 - __main__ - INFO - MLflow Run ID: 34eb3ae7a0984fe3ba8f528c224225bd
+2025-09-09 14:27:22 - __main__ - INFO - Results saved to: outputs
+2025-09-09 14:27:22 - __main__ - INFO - ================================================================================
+2025-09-09 14:27:22 - __main__ - INFO - Pipeline completed successfully with MLOps tracking!
+2025-09-12 15:12:57 - __main__ - INFO - Starting Titanic ML Pipeline
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Starting ML Pipeline execution...
+2025-09-12 15:12:57 - src.data.data_loader - INFO - Loading training data from src/data/train.csv
+2025-09-12 15:12:57 - src.data.data_loader - INFO - Loading test data from src/data/test.csv
+2025-09-12 15:12:57 - src.data.data_loader - INFO - Loaded train: (891, 12), test: (418, 11)
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Applying feature engineering...
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Feature engineering completed. Train shape: (891, 7), Test shape: (418, 7)
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Applying preprocessing...
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Preprocessing completed. Final feature count: 7
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Selected features: ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
+2025-09-12 15:12:57 - src.pipeline.ml_pipeline - INFO - Training and evaluating models...
+2025-09-12 15:12:57 - src.models.model_factory - INFO - Training and evaluating rf...
+2025-09-12 15:12:59 - src.models.model_factory - INFO - rf - CV: 0.8332, F1: 0.7232, ROC-AUC: 0.8731, PR-AUC: 0.8406
+2025-09-12 15:12:59 - src.models.model_factory - INFO - Training and evaluating xgb...
+2025-09-12 15:12:59 - src.models.model_factory - INFO - xgb - CV: 0.7592, F1: 0.5556, ROC-AUC: 0.8561, PR-AUC: 0.8235
+2025-09-12 15:12:59 - src.models.model_factory - INFO - Training and evaluating lgb...
+2025-09-12 15:13:00 - src.models.model_factory - INFO - lgb - CV: 0.7881, F1: 0.6792, ROC-AUC: 0.8639, PR-AUC: 0.8286
+2025-09-12 15:13:00 - src.models.model_factory - INFO - Training and evaluating lr...
+2025-09-12 15:13:00 - src.models.model_factory - INFO - lr - CV: 0.7913, F1: 0.7000, ROC-AUC: 0.8359, PR-AUC: 0.7636
+2025-09-12 15:13:00 - src.models.model_factory - INFO - Creating ensemble with models: ['xgb', 'lgb', 'lr']
+2025-09-12 15:13:02 - src.models.model_factory - INFO - 
+============================================================
+2025-09-12 15:13:02 - src.models.model_factory - INFO - MODEL PERFORMANCE SUMMARY
+2025-09-12 15:13:02 - src.models.model_factory - INFO - ============================================================
+2025-09-12 15:13:02 - src.models.model_factory - INFO - RF:
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   CV Accuracy: 0.8332
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val F1: 0.7232
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8731
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val PR-AUC: 0.8406
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Overfitting Gap: 0.0320
+2025-09-12 15:13:02 - src.models.model_factory - INFO - XGB:
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   CV Accuracy: 0.7592
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val F1: 0.5556
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8561
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val PR-AUC: 0.8235
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Overfitting Gap: 0.0012
+2025-09-12 15:13:02 - src.models.model_factory - INFO - LGB:
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   CV Accuracy: 0.7881
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val F1: 0.6792
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8639
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val PR-AUC: 0.8286
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Overfitting Gap: -0.0216
+2025-09-12 15:13:02 - src.models.model_factory - INFO - LR:
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   CV Accuracy: 0.7913
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val F1: 0.7000
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8359
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val PR-AUC: 0.7636
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Overfitting Gap: 0.0152
+2025-09-12 15:13:02 - src.models.model_factory - INFO - ENSEMBLE:
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   CV Accuracy: 0.8347
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val F1: 0.7263
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val ROC-AUC: 0.8571
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Val PR-AUC: 0.8205
+2025-09-12 15:13:02 - src.models.model_factory - INFO -   Overfitting Gap: 0.0223
+2025-09-12 15:13:02 - src.models.model_factory - INFO - ============================================================
+2025-09-12 15:13:02 - src.models.model_factory - INFO - Using RF model for consistency (CV: 0.8332) instead of ensemble (CV: 0.8347)
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Generating predictions...
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Predictions saved to outputs/submission.csv
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Predicted survival rate: 0.304
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Saving model artifacts...
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Model package saved to outputs/model_package.pkl
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Generating reports and visualizations...
+2025-09-12 15:13:02 - src.utils.visualization - INFO - Model comparison plot saved to outputs/pics/model_comparison.png
+2025-09-12 15:13:02 - src.utils.metrics - INFO - Generating detailed evaluation report for rf
+2025-09-12 15:13:02 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-09-12 15:13:02 - src.utils.metrics - INFO - ROC-AUC: 0.8731, PR-AUC: 0.8406, Optimal Threshold: 0.3582
+2025-09-12 15:13:02 - src.utils.metrics - INFO - Youden J optimal threshold: 0.3582 (J=0.6398)
+2025-09-12 15:13:02 - src.utils.metrics - INFO - F1 optimal threshold: 0.3582 (F1=0.7773)
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Reports generated successfully!
+2025-09-12 15:13:02 - src.pipeline.ml_pipeline - INFO - Pipeline execution completed successfully!
+2025-09-12 15:13:02 - __main__ - INFO - 
+================================================================================
+2025-09-12 15:13:02 - __main__ - INFO - PIPELINE EXECUTION SUMMARY
+2025-09-12 15:13:02 - __main__ - INFO - ================================================================================
+2025-09-12 15:13:02 - __main__ - INFO - Best Model: rf
+2025-09-12 15:13:02 - __main__ - INFO - Cross-Validation Score: 0.8332
+2025-09-12 15:13:02 - __main__ - INFO - Validation Accuracy: 0.8172
+2025-09-12 15:13:02 - __main__ - INFO - Predicted Survival Rate: 0.304
+2025-09-12 15:13:02 - __main__ - INFO - Results saved to: outputs
+2025-09-12 15:13:02 - __main__ - INFO - ================================================================================
+2025-09-12 15:13:02 - __main__ - INFO - Pipeline completed successfully!

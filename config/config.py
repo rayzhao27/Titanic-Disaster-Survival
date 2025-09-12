@@ -14,7 +14,7 @@ class DataConfig:
 @dataclass
 class FeatureConfig:
     variance_threshold: float = 0.01
-    k_best_features: int = 12
+    k_best_features: int = 7
     scale_features: bool = True
 
 

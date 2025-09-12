@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Prediction API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .endpoints {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .endpoints h3 {
+            margin-top: 0;
+        }
+        .endpoints a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .endpoints a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Titanic Survival Prediction API</h1>
+        <p>Enter passenger details to predict survival probability using our ML model (83.3% accuracy, PR-AUC: 0.841)</p>
+        
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="Pclass">Passenger Class:</label>
+                <select id="Pclass" name="Pclass" required>
+                    <option value="1">1st Class</option>
+                    <option value="2">2nd Class</option>
+                    <option value="3" selected>3rd Class</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="Sex">Sex:</label>
+                <select id="Sex" name="Sex" required>
+                    <option value="male" selected>Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="Age">Age:</label>
+                <input type="number" id="Age" name="Age" min="0" max="100" value="22" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="SibSp">Siblings/Spouses Aboard:</label>
+                <input type="number" id="SibSp" name="SibSp" min="0" max="10" value="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="Parch">Parents/Children Aboard:</label>
+                <input type="number" id="Parch" name="Parch" min="0" max="10" value="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="Fare">Fare (£):</label>
+                <input type="number" id="Fare" name="Fare" min="0" step="0.01" value="7.25" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="Embarked">Port of Embarkation:</label>
+                <select id="Embarked" name="Embarked" required>
+                    <option value="C">Cherbourg</option>
+                    <option value="Q">Queenstown</option>
+                    <option value="S" selected>Southampton</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="Name">Name:</label>
+                <input type="text" id="Name" name="Name" value="Doe, Mr. John" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="Ticket">Ticket Number:</label>
+                <input type="text" id="Ticket" name="Ticket" value="A/5 21171">
+            </div>
+            
+            <button type="submit">Predict Survival</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+        
+        <div class="endpoints">
+            <h3>API Endpoints:</h3>
+            <ul>
+                <li><a href="/docs" target="_blank">/docs</a> - Interactive API Documentation</li>
+                <li><a href="/health" target="_blank">/health</a> - Health Check</li>
+                <li><a href="/metrics" target="_blank">/metrics</a> - Performance Metrics</li>
+
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (['Pclass', 'SibSp', 'Parch'].includes(key)) {
+                    data[key] = parseInt(value);
+                } else if (key === 'Age' || key === 'Fare') {
+                    data[key] = parseFloat(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Making prediction...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    const survivalText = result.prediction === 1 ? 'SURVIVED' : 'DID NOT SURVIVE';
+                    const probability = (result.survival_probability * 100).toFixed(1);
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>Prediction Result:</h3>
+                        <p><strong>Outcome:</strong> ${survivalText}</p>
+                        <p><strong>Survival Probability:</strong> ${probability}%</p>
+                        <p><strong>Prediction Latency:</strong> ${result.latency_ms}ms</p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `<strong>Error:</strong> ${result.detail}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
