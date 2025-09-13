@@ -59,6 +59,8 @@ Titanic-ML-Pipeline/
 │   └── predict.py                  # Prediction script
 ├── static/
 │   └── index.html                  # Web interface
+├── tests
+│   └── basic_test.py								# Some testing
 ├── grafana/
 │   └── dashboard.json              # Monitoring dashboard configuration
 ├── .github/workflows/

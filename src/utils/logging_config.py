@@ -4,10 +4,7 @@ from pathlib import Path
 
 
 def setup_logging(log_level: str = "INFO", log_file: str = None) -> None:
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
     root_logger = logging.getLogger()
     root_logger.setLevel(getattr(logging, log_level.upper()))
@@ -24,5 +21,5 @@ def setup_logging(log_level: str = "INFO", log_file: str = None) -> None:
         file_handler.setFormatter(formatter)
         root_logger.addHandler(file_handler)
 
-    logging.getLogger('matplotlib').setLevel(logging.WARNING)
-    logging.getLogger('PIL').setLevel(logging.WARNING)
+    logging.getLogger("matplotlib").setLevel(logging.WARNING)
+    logging.getLogger("PIL").setLevel(logging.WARNING)

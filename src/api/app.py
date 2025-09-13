@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from src.features.feature_pipeline import Preprocessor
 
 logging.basicConfig(level=logging.INFO)
@@ -23,51 +23,66 @@ logger = logging.getLogger(__name__)
 model = None
 preprocessor = None
 
-# A/B Testing Configuration
+# A/B Testing
 AB_TEST_ENABLED = os.getenv("AB_TEST_ENABLED", "true").lower() == "true"
 CHALLENGER_TRAFFIC_PERCENT = float(os.getenv("CHALLENGER_TRAFFIC", "0.2"))  # 20% to challenger
 
-# A/B Testing Models
 best_model = None
 challenger_model = None
 
-# A/B Testing Metrics Storage (in production, use Redis/database)
 ab_test_metrics = {
     "best_model": defaultdict(list),
     "challenger": defaultdict(list),
-    "total_requests": {"best_model": 0, "challenger": 0}
+    "total_requests": {"best_model": 0, "challenger": 0},
 }
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global model, preprocessor, best_model, challenger_model
     try:
-        # Load main model (best model)
-        model = joblib.load("models/best_model.pkl")
-        best_model = model
-        
-        # Load challenger model (for A/B testing)
+        # Load best model
+        if os.path.exists("models/best_model.pkl"):
+            model = joblib.load("models/best_model.pkl")
+            best_model = model
+            logger.info("Best model loaded successfully")
+        else:
+            logger.error("Best model file not found at models/best_model.pkl")
+            raise FileNotFoundError("Best model file not found")
+
+        # Load challenger model
         try:
-            # Try to load a different model from model package
-            model_package = joblib.load("outputs/model_package.pkl")
-            model_results = model_package.get('model_results', {})
-            
-            # Use XGBoost as challenger if available
-            if 'xgb' in model_results and 'model' in model_results['xgb']:
-                challenger_model = model_results['xgb']['model']
-                logger.info("Challenger model (XGBoost) loaded successfully")
+            if os.path.exists("outputs/model_package.pkl"):
+                model_package = joblib.load("outputs/model_package.pkl")
+                model_results = model_package.get("model_results", {})
+
+                if "xgb" in model_results and "model" in model_results["xgb"]:
+                    challenger_model = model_results["xgb"]["model"]
+                    logger.info("Challenger model (XGBoost) loaded successfully")
+                else:
+                    challenger_model = best_model
+                    logger.info("Using best model as challenger (no XGBoost found)")
             else:
-                challenger_model = best_model  # Fallback to same model
-                logger.info("Using best model as challenger (fallback)")
+                challenger_model = best_model
+                logger.info("Model package not found, using best model as challenger")
         except Exception as e:
             challenger_model = best_model
             logger.warning(f"Could not load challenger model, using best model: {e}")
-        
+
         # Load preprocessor
-        preprocessor = Preprocessor()
-        train_df = pd.read_csv('src/data/train.csv')
-        preprocessor.fit(train_df)
-        
+        try:
+            preprocessor = Preprocessor()
+            if os.path.exists("src/data/train.csv"):
+                train_df = pd.read_csv("src/data/train.csv")
+                preprocessor.fit(train_df)
+                logger.info("Preprocessor loaded and fitted successfully")
+            else:
+                logger.error("Training data not found at src/data/train.csv")
+                raise FileNotFoundError("Training data not found")
+        except Exception as e:
+            logger.error(f"Failed to load preprocessor: {e}")
+            raise
+
         logger.info("Models and preprocessor loaded successfully")
         logger.info(f"A/B Testing: {'Enabled' if AB_TEST_ENABLED else 'Disabled'}")
         if AB_TEST_ENABLED:
@@ -77,16 +92,18 @@ async def lifespan(app: FastAPI):
         raise
     yield
 
+
 app = FastAPI(
-    title="Titanic Survival Prediction API", 
+    title="Titanic Survival Prediction API",
     version="1.0",
     description="A API for predicting if a passenger is survival",
     docs_url="/docs",
     redoc_url=None,
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 class PassengerData(BaseModel):
     Pclass: int
@@ -98,76 +115,79 @@ class PassengerData(BaseModel):
     Embarked: str
     Ticket: str = "UNKNOWN"
     Name: str = "Unknown, Mr. John"
-    
+
+
 class PredictionResponse(BaseModel):
     survival_probability: float
     prediction: int
     latency_ms: float
-    model_version: str = "best_model"  # Track which model was used
+    model_version: str = "best_model"
+
 
 def select_model_for_ab_test():
-    """Select model based on A/B testing configuration"""
     if not AB_TEST_ENABLED:
         return best_model, "best_model"
-    
-    # Traffic splitting: challenger gets CHALLENGER_TRAFFIC_PERCENT of traffic
+
     if random.random() < CHALLENGER_TRAFFIC_PERCENT:
         return challenger_model, "challenger"
     else:
         return best_model, "best_model"
 
+
 def log_ab_test_metrics(model_version: str, latency: float, probability: float, prediction: int):
-    """Log A/B test metrics for analysis"""
     ab_test_metrics["total_requests"][model_version] += 1
     ab_test_metrics[model_version]["latencies"].append(latency)
     ab_test_metrics[model_version]["probabilities"].append(probability)
     ab_test_metrics[model_version]["predictions"].append(prediction)
     ab_test_metrics[model_version]["timestamps"].append(datetime.now().isoformat())
 
+
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_survival(passenger: PassengerData):
     start_time = time.time()
-    
+
     try:
-        # A/B Test: Select model
         selected_model, model_version = select_model_for_ab_test()
-        
+
         df = pd.DataFrame([passenger.dict()])
-        
-        if not hasattr(preprocessor, 'median_ages_by_title'):
-            train_df = pd.read_csv('src/data/train.csv')
+
+        if not hasattr(preprocessor, "median_ages_by_title"):
+            train_df = pd.read_csv("src/data/train.csv")
             preprocessor.fit(train_df)
-        
+
         processed_df = preprocessor.transform(df)
-        feature_columns = ['Sex', 'Age_bins', 'Fare_bins', 'Family_size', 'Family_Survival', 'Pclass_2', 'Pclass_3']
-        
-        processed_df['Pclass_2'] = (processed_df['Pclass'] == 2).astype(int)
-        processed_df['Pclass_3'] = (processed_df['Pclass'] == 3).astype(int)
-        
+        feature_columns = ["Sex", "Age_bins", "Fare_bins", "Family_size", "Family_Survival", "Pclass_2", "Pclass_3"]
+
+        processed_df["Pclass_2"] = (processed_df["Pclass"] == 2).astype(int)
+        processed_df["Pclass_3"] = (processed_df["Pclass"] == 3).astype(int)
+
         features = processed_df[feature_columns]
         probability = selected_model.predict_proba(features)[0][1]
         prediction = int(probability > 0.5)
         latency = (time.time() - start_time) * 1000
-        
-        # Log A/B test metrics
+
         log_ab_test_metrics(model_version, latency, probability, prediction)
-        
-        logger.info(f"Prediction made: {prediction}, Probability: {probability:.3f}, Latency: {latency:.2f}ms, Model: {model_version}")
-        
+
+        logger.info(
+            f"Prediction made: {prediction}, Probability: {probability:.3f}, Latency: {latency:.2f}ms, Model: {model_version}"
+        )
+
         return PredictionResponse(
             survival_probability=round(probability, 4),
             prediction=prediction,
             latency_ms=round(latency, 2),
-            model_version=model_version
+            model_version=model_version,
         )
-        
+
     except Exception as e:
         logger.error(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/")
 async def root():
-    return FileResponse('static/index.html')
+    return FileResponse("static/index.html")
+
 
 @app.get("/api")
 async def api_info():
@@ -180,21 +200,18 @@ async def api_info():
             "health": "/health - GET - Check API health",
             "metrics": "/metrics - GET - Get performance metrics",
             "docs": "/docs - GET - Interactive API documentation",
-            "redoc": "/redoc - GET - Alternative API documentation"
+            "redoc": "/redoc - GET - Alternative API documentation",
         },
-        "model_info": {
-            "type": "Random Forest",
-            "accuracy": "83.3%",
-            "pr_auc": "0.841"
-        }
+        "model_info": {"type": "Random Forest", "accuracy": "83.3%", "pr_auc": "0.841"},
     }
+
 
 @app.get("/health", response_class=HTMLResponse)
 async def health_check():
     model_status = "✅ Loaded" if model is not None else "❌ Not Loaded"
     preprocessor_status = "✅ Loaded" if preprocessor is not None else "❌ Not Loaded"
     overall_status = "🟢 Healthy" if (model is not None and preprocessor is not None) else "🔴 Unhealthy"
-    
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -248,6 +265,7 @@ async def health_check():
     </html>
     """
     return html_content
+
 
 @app.get("/metrics", response_class=HTMLResponse)
 async def get_metrics():
@@ -353,41 +371,50 @@ async def get_metrics():
     """
     return html_content
 
+
 @app.get("/health/json")
 async def health_check_json():
-    """JSON version of health check for programmatic access"""
     return {
         "status": "healthy" if (model is not None and preprocessor is not None) else "unhealthy",
         "model_loaded": model is not None,
-        "preprocessor_loaded": preprocessor is not None
+        "preprocessor_loaded": preprocessor is not None,
     }
 
-@app.get("/metrics/json") 
+
+@app.get("/metrics/json")
 async def get_metrics_json():
-    """JSON version of metrics for programmatic access"""
     return {
         "p95_latency_ms": 15,
         "qps": 100,
         "model_accuracy": 0.833,
         "roc_auc": 0.873,
         "pr_auc": 0.841,
-        "model_load_time_seconds": 5
-    }@a
-pp.get("/ab-test/stats", response_class=HTMLResponse)
+        "model_load_time_seconds": 5,
+    } @ a
+
+
+@app.get("/ab-test/stats", response_class=HTMLResponse)
+
+
 async def ab_test_stats():
-    """A/B Test Statistics Dashboard"""
-    
-    # Calculate statistics
     best_model_requests = ab_test_metrics["total_requests"]["best_model"]
     challenger_requests = ab_test_metrics["total_requests"]["challenger"]
     total_requests = best_model_requests + challenger_requests
-    
-    best_model_avg_latency = sum(ab_test_metrics["best_model"]["latencies"]) / max(len(ab_test_metrics["best_model"]["latencies"]), 1)
-    challenger_avg_latency = sum(ab_test_metrics["challenger"]["latencies"]) / max(len(ab_test_metrics["challenger"]["latencies"]), 1)
-    
-    best_model_avg_prob = sum(ab_test_metrics["best_model"]["probabilities"]) / max(len(ab_test_metrics["best_model"]["probabilities"]), 1)
-    challenger_avg_prob = sum(ab_test_metrics["challenger"]["probabilities"]) / max(len(ab_test_metrics["challenger"]["probabilities"]), 1)
-    
+
+    best_model_avg_latency = sum(ab_test_metrics["best_model"]["latencies"]) / max(
+        len(ab_test_metrics["best_model"]["latencies"]), 1
+    )
+    challenger_avg_latency = sum(ab_test_metrics["challenger"]["latencies"]) / max(
+        len(ab_test_metrics["challenger"]["latencies"]), 1
+    )
+
+    best_model_avg_prob = sum(ab_test_metrics["best_model"]["probabilities"]) / max(
+        len(ab_test_metrics["best_model"]["probabilities"]), 1
+    )
+    challenger_avg_prob = sum(ab_test_metrics["challenger"]["probabilities"]) / max(
+        len(ab_test_metrics["challenger"]["probabilities"]), 1
+    )
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -486,33 +513,37 @@ async def ab_test_stats():
     """
     return html_content
 
+
 @app.get("/ab-test/stats/json")
 async def ab_test_stats_json():
-    """A/B Test Statistics in JSON format"""
     best_model_requests = ab_test_metrics["total_requests"]["best_model"]
     challenger_requests = ab_test_metrics["total_requests"]["challenger"]
-    
+
     return {
         "ab_test_enabled": AB_TEST_ENABLED,
         "challenger_traffic_percent": CHALLENGER_TRAFFIC_PERCENT,
         "total_requests": {
             "best_model": best_model_requests,
             "challenger": challenger_requests,
-            "total": best_model_requests + challenger_requests
+            "total": best_model_requests + challenger_requests,
         },
         "average_latency": {
-            "best_model": sum(ab_test_metrics["best_model"]["latencies"]) / max(len(ab_test_metrics["best_model"]["latencies"]), 1),
-            "challenger": sum(ab_test_metrics["challenger"]["latencies"]) / max(len(ab_test_metrics["challenger"]["latencies"]), 1)
+            "best_model": sum(ab_test_metrics["best_model"]["latencies"])
+            / max(len(ab_test_metrics["best_model"]["latencies"]), 1),
+            "challenger": sum(ab_test_metrics["challenger"]["latencies"])
+            / max(len(ab_test_metrics["challenger"]["latencies"]), 1),
         },
         "average_probability": {
-            "best_model": sum(ab_test_metrics["best_model"]["probabilities"]) / max(len(ab_test_metrics["best_model"]["probabilities"]), 1),
-            "challenger": sum(ab_test_metrics["challenger"]["probabilities"]) / max(len(ab_test_metrics["challenger"]["probabilities"]), 1)
-        }
+            "best_model": sum(ab_test_metrics["best_model"]["probabilities"])
+            / max(len(ab_test_metrics["best_model"]["probabilities"]), 1),
+            "challenger": sum(ab_test_metrics["challenger"]["probabilities"])
+            / max(len(ab_test_metrics["challenger"]["probabilities"]), 1),
+        },
     }
+
 
 @app.get("/ab-test/config", response_class=HTMLResponse)
 async def ab_test_config():
-    """A/B Test Configuration Interface"""
     html_content = f"""
     <!DOCTYPE html>
     <html>
