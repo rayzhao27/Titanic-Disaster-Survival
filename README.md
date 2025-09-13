@@ -37,7 +37,7 @@ Titanic-ML-Pipeline/
 │   └── config.py                   # Configuration management
 ├── src/
 │   ├── api/
-│   │   └── app.py                  # FastAPI application
+│   │   └── app.py                  # FastAPI application with A/B testing
 │   ├── data/
 │   │   ├── data_loader.py          # CSV data loading and preprocessing
 │   │   ├── data.ipynb              # Data exploration notebook
@@ -56,25 +56,30 @@ Titanic-ML-Pipeline/
 │       ├── metrics.py              # Model evaluation metrics
 │       └── visualization.py        # Training visualization
 ├── scripts/
-│   └── predict.py                  # Standalone prediction script
+│   └── predict.py                  # Prediction script
 ├── static/
-│   └── index.html                  # Web interface for API (AI Generated)
+│   └── index.html                  # Web interface
 ├── grafana/
 │   └── dashboard.json              # Monitoring dashboard configuration
 ├── .github/workflows/
 │   └── ci.yml                      # CI/CD pipeline
 ├── models/
-│   └── best_model.pkl              # Production model for API
-├── pics/
+│   └── best_model.pkl              # Best model
+├── pics/                           # Some Screenshots
+│   ├── api_host.png                # Main interface screenshot
+│   ├── doc.png                     # API documentation screenshot
+│   ├── health_check.png            # Health dashboard screenshot
+│   ├── metrics.png                 # Metrics dashboard screenshot
 │   └── training_accuracies.png     # Training visualization
-└── outputs/                        # Training outputs and results
+└── outputs/                        # Training outputs
     ├── submission.csv              # Kaggle submission file
-    ├── model_package.pkl           # Trained model package
-    ├── evaluation_report.json      # Detailed evaluation metrics
+    ├── model_package.pkl           # Trained models
+    ├── evaluation_report.json      # Metrics
     ├── pipeline.log                # Execution logs
     └── pics/
-        └── model_comparison.png    # Model performance visualization
+        └── model_comparison.png    # Model performance
 ```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,11 +191,24 @@ Titanic-ML-Pipeline/
   - Model performance and error rate visualization
   - Production-ready observability configuration
 
-**Testing** (`tests/`)
+**A/B Testing Framework**
 
-- **`test_api.py`**: API endpoint validation
-- **`test_api_endpoints.py`**: Comprehensive API testing
-- **`test_mlops_components.py`**: MLOps component verification
+- **Model A/B Testing**: Safe deployment of challenger models
+  - **Best Model**: Random Forest (production model)
+  - **Challenger Model**: XGBoost (alternative model for testing)
+  - **Traffic Splitting**: Configurable percentage routing (default: 80/20)
+  - **Environment Configuration**: `AB_TEST_ENABLED`, `CHALLENGER_TRAFFIC`
+
+- **A/B Testing Endpoints**:
+  - **`/ab-test/stats`**: Interactive dashboard with performance comparison
+  - **`/ab-test/stats/json`**: JSON API for programmatic access
+  - **`/ab-test/config`**: Configuration overview and settings
+
+- **Metrics Tracking**:
+  - Request counts and traffic distribution per model
+  - Average latency comparison between models
+  - Prediction probability analysis and model performance
+  - Real-time A/B test monitoring and reporting
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -245,14 +263,28 @@ python main.py --output-dir results --log-level DEBUG --train-data data/train.cs
 python scripts/predict.py --model-package outputs/model_package.pkl --data new_data.csv --output predictions.csv
 ```
 
+**A/B Testing Configuration**
+
+```bash
+# Enable A/B testing with 20% challenger traffic
+export AB_TEST_ENABLED=true
+export CHALLENGER_TRAFFIC=0.2
+
+# Start API with A/B testing
+uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+
+# View A/B test results
+curl http://localhost:8000/ab-test/stats/json
+```
+
 **Docker Deployment**
 
 ```bash
 # Build Docker image
 docker build -t titanic-ml:latest .
 
-# Run container
-docker run -d -p 8000:8000 --name titanic-api titanic-ml:latest
+# Run container with A/B testing enabled
+docker run -d -p 8000:8000 -e AB_TEST_ENABLED=true -e CHALLENGER_TRAFFIC=0.2 --name titanic-api titanic-ml:latest
 
 # Check container health
 curl http://localhost:8000/health
@@ -433,6 +465,7 @@ The pipeline evaluates multiple algorithms and selects the best performer:
 
 **MLOps Production Features**
 - High-performance FastAPI service with P95 latency < 50ms at 100+ QPS
+- A/B testing framework for safe model deployments with traffic splitting
 - Docker containerization with automated health checks
 - CI/CD pipeline with GitHub Actions for automated testing and deployment
 - Prometheus metrics collection and Grafana dashboard monitoring

@@ -2,6 +2,10 @@ import os
 import sys
 import logging
 import time
+import random
+import json
+from datetime import datetime
+from collections import defaultdict
 import pandas as pd
 import joblib
 from pydantic import BaseModel
@@ -19,17 +23,57 @@ logger = logging.getLogger(__name__)
 model = None
 preprocessor = None
 
+# A/B Testing Configuration
+AB_TEST_ENABLED = os.getenv("AB_TEST_ENABLED", "true").lower() == "true"
+CHALLENGER_TRAFFIC_PERCENT = float(os.getenv("CHALLENGER_TRAFFIC", "0.2"))  # 20% to challenger
+
+# A/B Testing Models
+best_model = None
+challenger_model = None
+
+# A/B Testing Metrics Storage (in production, use Redis/database)
+ab_test_metrics = {
+    "best_model": defaultdict(list),
+    "challenger": defaultdict(list),
+    "total_requests": {"best_model": 0, "challenger": 0}
+}
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, preprocessor
+    global model, preprocessor, best_model, challenger_model
     try:
+        # Load main model (best model)
         model = joblib.load("models/best_model.pkl")
+        best_model = model
+        
+        # Load challenger model (for A/B testing)
+        try:
+            # Try to load a different model from model package
+            model_package = joblib.load("outputs/model_package.pkl")
+            model_results = model_package.get('model_results', {})
+            
+            # Use XGBoost as challenger if available
+            if 'xgb' in model_results and 'model' in model_results['xgb']:
+                challenger_model = model_results['xgb']['model']
+                logger.info("Challenger model (XGBoost) loaded successfully")
+            else:
+                challenger_model = best_model  # Fallback to same model
+                logger.info("Using best model as challenger (fallback)")
+        except Exception as e:
+            challenger_model = best_model
+            logger.warning(f"Could not load challenger model, using best model: {e}")
+        
+        # Load preprocessor
         preprocessor = Preprocessor()
         train_df = pd.read_csv('src/data/train.csv')
         preprocessor.fit(train_df)
-        logger.info("Model and preprocessor loaded and fitted successfully")
+        
+        logger.info("Models and preprocessor loaded successfully")
+        logger.info(f"A/B Testing: {'Enabled' if AB_TEST_ENABLED else 'Disabled'}")
+        if AB_TEST_ENABLED:
+            logger.info(f"Challenger traffic: {CHALLENGER_TRAFFIC_PERCENT*100}%")
     except Exception as e:
-        logger.error(f"Failed to load model: {e}")
+        logger.error(f"Failed to load models: {e}")
         raise
     yield
 
@@ -59,12 +103,35 @@ class PredictionResponse(BaseModel):
     survival_probability: float
     prediction: int
     latency_ms: float
+    model_version: str = "best_model"  # Track which model was used
+
+def select_model_for_ab_test():
+    """Select model based on A/B testing configuration"""
+    if not AB_TEST_ENABLED:
+        return best_model, "best_model"
+    
+    # Traffic splitting: challenger gets CHALLENGER_TRAFFIC_PERCENT of traffic
+    if random.random() < CHALLENGER_TRAFFIC_PERCENT:
+        return challenger_model, "challenger"
+    else:
+        return best_model, "best_model"
+
+def log_ab_test_metrics(model_version: str, latency: float, probability: float, prediction: int):
+    """Log A/B test metrics for analysis"""
+    ab_test_metrics["total_requests"][model_version] += 1
+    ab_test_metrics[model_version]["latencies"].append(latency)
+    ab_test_metrics[model_version]["probabilities"].append(probability)
+    ab_test_metrics[model_version]["predictions"].append(prediction)
+    ab_test_metrics[model_version]["timestamps"].append(datetime.now().isoformat())
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_survival(passenger: PassengerData):
     start_time = time.time()
     
     try:
+        # A/B Test: Select model
+        selected_model, model_version = select_model_for_ab_test()
+        
         df = pd.DataFrame([passenger.dict()])
         
         if not hasattr(preprocessor, 'median_ages_by_title'):
@@ -78,16 +145,20 @@ async def predict_survival(passenger: PassengerData):
         processed_df['Pclass_3'] = (processed_df['Pclass'] == 3).astype(int)
         
         features = processed_df[feature_columns]
-        probability = model.predict_proba(features)[0][1]
+        probability = selected_model.predict_proba(features)[0][1]
         prediction = int(probability > 0.5)
         latency = (time.time() - start_time) * 1000
         
-        logger.info(f"Prediction made: {prediction}, Probability: {probability:.3f}, Latency: {latency:.2f}ms")
+        # Log A/B test metrics
+        log_ab_test_metrics(model_version, latency, probability, prediction)
+        
+        logger.info(f"Prediction made: {prediction}, Probability: {probability:.3f}, Latency: {latency:.2f}ms, Model: {model_version}")
         
         return PredictionResponse(
             survival_probability=round(probability, 4),
             prediction=prediction,
-            latency_ms=round(latency, 2)
+            latency_ms=round(latency, 2),
+            model_version=model_version
         )
         
     except Exception as e:
@@ -301,4 +372,201 @@ async def get_metrics_json():
         "roc_auc": 0.873,
         "pr_auc": 0.841,
         "model_load_time_seconds": 5
+    }@a
+pp.get("/ab-test/stats", response_class=HTMLResponse)
+async def ab_test_stats():
+    """A/B Test Statistics Dashboard"""
+    
+    # Calculate statistics
+    best_model_requests = ab_test_metrics["total_requests"]["best_model"]
+    challenger_requests = ab_test_metrics["total_requests"]["challenger"]
+    total_requests = best_model_requests + challenger_requests
+    
+    best_model_avg_latency = sum(ab_test_metrics["best_model"]["latencies"]) / max(len(ab_test_metrics["best_model"]["latencies"]), 1)
+    challenger_avg_latency = sum(ab_test_metrics["challenger"]["latencies"]) / max(len(ab_test_metrics["challenger"]["latencies"]), 1)
+    
+    best_model_avg_prob = sum(ab_test_metrics["best_model"]["probabilities"]) / max(len(ab_test_metrics["best_model"]["probabilities"]), 1)
+    challenger_avg_prob = sum(ab_test_metrics["challenger"]["probabilities"]) / max(len(ab_test_metrics["challenger"]["probabilities"]), 1)
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>A/B Test Statistics</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 0; padding: 40px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }}
+            .container {{ background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 900px; width: 100%; }}
+            h1 {{ color: #2c3e50; text-align: center; }}
+            .status {{ padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center; }}
+            .enabled {{ background-color: #d4edda; color: #155724; }}
+            .disabled {{ background-color: #f8d7da; color: #721c24; }}
+            .stats-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }}
+            .stat-card {{ background-color: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }}
+            .champion {{ border-left: 4px solid #28a745; }}
+            .challenger {{ border-left: 4px solid #007bff; }}
+            .stat-value {{ font-size: 1.5em; font-weight: bold; color: #2c3e50; }}
+            .stat-label {{ color: #7f8c8d; margin-top: 5px; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }}
+            th {{ background-color: #3498db; color: white; }}
+            tr:hover {{ background-color: #f5f5f5; }}
+            .back-link {{ margin-top: 20px; text-align: center; }}
+            .back-link a {{ color: #3498db; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>A/B Test Statistics Dashboard</h1>
+            
+            <div class="status {'enabled' if AB_TEST_ENABLED else 'disabled'}">
+                A/B Testing: {'Enabled' if AB_TEST_ENABLED else 'Disabled'}
+                {f'(Challenger Traffic: {CHALLENGER_TRAFFIC_PERCENT*100}%)' if AB_TEST_ENABLED else ''}
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card champion">
+                    <div class="stat-value">{best_model_requests}</div>
+                    <div class="stat-label">Best Model Requests</div>
+                </div>
+                <div class="stat-card challenger">
+                    <div class="stat-value">{challenger_requests}</div>
+                    <div class="stat-label">Challenger Requests</div>
+                </div>
+                <div class="stat-card champion">
+                    <div class="stat-value">{best_model_avg_latency:.1f}ms</div>
+                    <div class="stat-label">Best Model Avg Latency</div>
+                </div>
+                <div class="stat-card challenger">
+                    <div class="stat-value">{challenger_avg_latency:.1f}ms</div>
+                    <div class="stat-label">Challenger Avg Latency</div>
+                </div>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Best Model (Random Forest)</th>
+                    <th>Challenger (XGBoost)</th>
+                    <th>Difference</th>
+                </tr>
+                <tr>
+                    <td>Total Requests</td>
+                    <td>{best_model_requests}</td>
+                    <td>{challenger_requests}</td>
+                    <td>{challenger_requests - best_model_requests:+d}</td>
+                </tr>
+                <tr>
+                    <td>Traffic Share</td>
+                    <td>{best_model_requests/max(total_requests,1)*100:.1f}%</td>
+                    <td>{challenger_requests/max(total_requests,1)*100:.1f}%</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Average Latency</td>
+                    <td>{best_model_avg_latency:.2f}ms</td>
+                    <td>{challenger_avg_latency:.2f}ms</td>
+                    <td>{challenger_avg_latency - best_model_avg_latency:+.2f}ms</td>
+                </tr>
+                <tr>
+                    <td>Average Probability</td>
+                    <td>{best_model_avg_prob:.3f}</td>
+                    <td>{challenger_avg_prob:.3f}</td>
+                    <td>{challenger_avg_prob - best_model_avg_prob:+.3f}</td>
+                </tr>
+            </table>
+            
+            <div class="back-link">
+                <a href="/">← Back to Main Interface</a> | 
+                <a href="/docs">API Documentation</a> | 
+                <a href="/ab-test/config">A/B Test Config</a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
+
+@app.get("/ab-test/stats/json")
+async def ab_test_stats_json():
+    """A/B Test Statistics in JSON format"""
+    best_model_requests = ab_test_metrics["total_requests"]["best_model"]
+    challenger_requests = ab_test_metrics["total_requests"]["challenger"]
+    
+    return {
+        "ab_test_enabled": AB_TEST_ENABLED,
+        "challenger_traffic_percent": CHALLENGER_TRAFFIC_PERCENT,
+        "total_requests": {
+            "best_model": best_model_requests,
+            "challenger": challenger_requests,
+            "total": best_model_requests + challenger_requests
+        },
+        "average_latency": {
+            "best_model": sum(ab_test_metrics["best_model"]["latencies"]) / max(len(ab_test_metrics["best_model"]["latencies"]), 1),
+            "challenger": sum(ab_test_metrics["challenger"]["latencies"]) / max(len(ab_test_metrics["challenger"]["latencies"]), 1)
+        },
+        "average_probability": {
+            "best_model": sum(ab_test_metrics["best_model"]["probabilities"]) / max(len(ab_test_metrics["best_model"]["probabilities"]), 1),
+            "challenger": sum(ab_test_metrics["challenger"]["probabilities"]) / max(len(ab_test_metrics["challenger"]["probabilities"]), 1)
+        }
     }
+
+@app.get("/ab-test/config", response_class=HTMLResponse)
+async def ab_test_config():
+    """A/B Test Configuration Interface"""
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>A/B Test Configuration</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 0; padding: 40px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }}
+            .container {{ background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 600px; width: 100%; }}
+            h1 {{ color: #2c3e50; text-align: center; }}
+            .config-item {{ margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }}
+            .config-label {{ font-weight: bold; color: #2c3e50; }}
+            .config-value {{ color: #7f8c8d; margin-top: 5px; }}
+            .note {{ background-color: #fff3cd; padding: 15px; border-radius: 5px; margin-top: 20px; }}
+            .back-link {{ margin-top: 20px; text-align: center; }}
+            .back-link a {{ color: #3498db; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>A/B Test Configuration</h1>
+            
+            <div class="config-item">
+                <div class="config-label">A/B Testing Status</div>
+                <div class="config-value">{'Enabled' if AB_TEST_ENABLED else 'Disabled'}</div>
+            </div>
+            
+            <div class="config-item">
+                <div class="config-label">Challenger Traffic Percentage</div>
+                <div class="config-value">{CHALLENGER_TRAFFIC_PERCENT*100}%</div>
+            </div>
+            
+            <div class="config-item">
+                <div class="config-label">Best Model</div>
+                <div class="config-value">Random Forest (best_model.pkl)</div>
+            </div>
+            
+            <div class="config-item">
+                <div class="config-label">Challenger Model</div>
+                <div class="config-value">XGBoost (from model_package.pkl)</div>
+            </div>
+            
+            <div class="note">
+                <strong>Note:</strong> Configuration is set via environment variables:
+                <br>• AB_TEST_ENABLED=true/false
+                <br>• CHALLENGER_TRAFFIC=0.0-1.0 (default: 0.2)
+            </div>
+            
+            <div class="back-link">
+                <a href="/">← Back to Main Interface</a> | 
+                <a href="/ab-test/stats">A/B Test Stats</a> | 
+                <a href="/docs">API Documentation</a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
